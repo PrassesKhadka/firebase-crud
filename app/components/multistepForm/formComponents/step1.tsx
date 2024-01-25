@@ -1,19 +1,8 @@
 import React from "react";
-import { TabsTrigger, TabsList, TabsContent, Tabs } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from "@/components/ui/select";
-import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import { Button } from "@/components/ui/button";
 import FormWrapper from "../formWrapper";
-import { Control, Controller } from "react-hook-form";
-import { IuserDocument } from "@/app/interfaces";
+import { Controller } from "react-hook-form";
 import { IformStepProps } from "..";
 
 const Step1 = ({ control, errors }: IformStepProps) => {
@@ -27,6 +16,7 @@ const Step1 = ({ control, errors }: IformStepProps) => {
               <Controller
                 control={control}
                 name="personalInfo.name.firstName"
+                rules={{ required: "This field should not be empty" }}
                 render={({ field: { value, onChange } }) => (
                   <Input
                     value={value}
@@ -37,12 +27,16 @@ const Step1 = ({ control, errors }: IformStepProps) => {
                   />
                 )}
               />
+              <p className="text-red-500 text-xs italic">
+                {errors.personalInfo?.name?.firstName?.message}
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="last-name">Last name</Label>
               <Controller
                 control={control}
                 name="personalInfo.name.lastName"
+                rules={{ required: "This field should not be empty" }}
                 render={({ field: { value, onChange } }) => (
                   <Input
                     value={value}
@@ -52,6 +46,9 @@ const Step1 = ({ control, errors }: IformStepProps) => {
                   />
                 )}
               />
+              <p className="text-red-500 text-xs italic">
+                {errors.personalInfo?.name?.lastName?.message}
+              </p>
             </div>
           </div>
           <div className="space-y-2">
@@ -59,9 +56,15 @@ const Step1 = ({ control, errors }: IformStepProps) => {
             <Controller
               control={control}
               name="personalInfo.email"
+              rules={{
+                required: "This field should not be empty",
+                pattern: {
+                  value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/,
+                  message: "Email is required",
+                },
+              }}
               render={({ field: { value, onChange } }) => (
                 <Input
-                  type="email"
                   value={value}
                   onChange={onChange}
                   id="email"
@@ -69,12 +72,16 @@ const Step1 = ({ control, errors }: IformStepProps) => {
                 />
               )}
             />
+            <p className="text-red-500 text-xs italic">
+              {errors.personalInfo?.email?.message}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="address">Address</Label>
             <Controller
               control={control}
               name="personalInfo.address"
+              rules={{ required: "This field should not be empty" }}
               render={({ field: { value, onChange } }) => (
                 <Input
                   value={value}
@@ -84,12 +91,16 @@ const Step1 = ({ control, errors }: IformStepProps) => {
                 />
               )}
             />
+            <p className="text-red-500 text-xs italic">
+              {errors.personalInfo?.address?.message}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="contact">Contact Information</Label>
             <Controller
               control={control}
               name="personalInfo.contactInfo"
+              rules={{ required: "This field should not be empty" }}
               render={({ field: { value, onChange } }) => (
                 <Input
                   value={value}
@@ -99,6 +110,9 @@ const Step1 = ({ control, errors }: IformStepProps) => {
                 />
               )}
             />
+            <p className="text-red-500 text-xs italic">
+              {errors.personalInfo?.contactInfo?.message}
+            </p>
           </div>
         </div>
       </div>

@@ -15,8 +15,12 @@ export interface IacademicInfo {
   educationalBackground: string;
   gpa: string;
 }
+export interface Iphoto {
+  name: string;
+  url: string;
+}
 export interface IadditionalInfo {
-  photoUrl: string;
+  photo: Iphoto;
   date: string;
   course: string;
   gender: "male" | "female";

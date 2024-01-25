@@ -13,20 +13,32 @@ import {
   Control,
   FieldErrors,
   Field,
+  UseFormSetValue,
 } from "react-hook-form";
 import { Idata, IuserDocument } from "@/app/interfaces";
 
 export interface IformStepProps {
   control: Control<Idata>;
   errors: FieldErrors<Idata>;
+  setValue?: UseFormSetValue<Idata>;
 }
 
 const Form = () => {
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
-  } = useForm<Idata>();
+  } = useForm<Idata>({
+    defaultValues: {
+      additionalInfo: {
+        photo: {
+          name: "avatar.png",
+          url: "https://firebasestorage.googleapis.com/v0/b/fir-crud-6aeba.appspot.com/o/avatar.png?alt=media&token=fb323f51-1517-4931-a55d-8f8b05d274de",
+        },
+      },
+    },
+  });
 
   const {
     currentStep,
@@ -40,7 +52,7 @@ const Form = () => {
   } = useMultistepForm([
     <Step1 control={control} errors={errors} />,
     <Step2 control={control} errors={errors} />,
-    <Step3 control={control} errors={errors} />,
+    <Step3 control={control} errors={errors} setValue={setValue} />,
   ]);
 
   const submitHandler = (data: Idata) => {
@@ -50,6 +62,11 @@ const Form = () => {
   return (
     <>
       <div className="mx-auto max-w-xl">
+        <div className="flex justify-end items-center">
+          <span className="text-md font-semibold">
+            {currentStep + 1} / {totalStep}
+          </span>
+        </div>
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Student Enrollment Form</h1>
           <p className="text-gray-500 dark:text-gray-400">
@@ -64,7 +81,7 @@ const Form = () => {
               "Additional Information",
             ]).map((value, index) => (
               <div
-                onClick={() => goTo(index)}
+                // onClick={() => goTo(index)}
                 className={`text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
                   currentStep === index ? "text-zinc-900 bg-white " : ""
                 }`}
@@ -77,14 +94,10 @@ const Form = () => {
             {StepRender}
 
             <div className="flex gap-4 justify-end mt-4">
-              {isFirstStep() ? null : (
-                <Button onClick={() => prev()}>Prev</Button>
-              )}
-              {isLastStep() ? (
-                <Button type="submit">Submit</Button>
-              ) : (
-                <Button type="submit">Next</Button>
-              )}
+              {isFirstStep() ? null : <Button onClick={prev}>Prev</Button>}
+              <Button type="submit" onClick={next}>
+                {isLastStep() ? "Submit" : "Next"}
+              </Button>
             </div>
           </form>
         </div>
