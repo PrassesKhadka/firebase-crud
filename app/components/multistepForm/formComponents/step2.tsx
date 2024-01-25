@@ -1,16 +1,6 @@
 import React from "react";
-import { TabsTrigger, TabsList, TabsContent, Tabs } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from "@/components/ui/select";
-import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import { Button } from "@/components/ui/button";
 import FormWrapper from "../formWrapper";
 import { IformStepProps } from "..";
 import { Controller } from "react-hook-form";

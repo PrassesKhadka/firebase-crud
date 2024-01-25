@@ -11,7 +11,6 @@ import {
   Select,
 } from "@/components/ui/select";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import { Button } from "@/components/ui/button";
 import FormWrapper from "../formWrapper";
 import { IformStepProps } from "..";
 import { Controller } from "react-hook-form";
@@ -20,10 +19,11 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const Step3 = ({ control, errors, setValue }: IformStepProps) => {
   const [file, setFile] = useState<any>();
-  const [progress, setProgress] = useState<number>(0);
+  const [progress, setProgress] = useState<string>("");
 
   useEffect(() => {
-    if (file) {
+    if (!file) return;
+    const upload = () => {
       const storageRef = ref(storage, new Date().getTime() + file.name);
 
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -33,7 +33,7 @@ const Step3 = ({ control, errors, setValue }: IformStepProps) => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress((prev) => (prev = progress));
+          setProgress(`The upload is ${Math.round(progress)}% complete`);
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");
@@ -53,7 +53,8 @@ const Step3 = ({ control, errors, setValue }: IformStepProps) => {
           });
         }
       );
-    }
+    };
+    upload();
   }, [file]);
 
   return (
@@ -61,13 +62,16 @@ const Step3 = ({ control, errors, setValue }: IformStepProps) => {
       <div>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="photo">Photo</Label>
+            <Label htmlFor="photo">Photo (Optional)</Label>
             <Input
               onChange={(e) => setFile(e.target.files?.[0])}
               id="photo"
               accept="image/png"
               type="file"
             />
+            <p className="text-green-500 text-xs italic">
+              {progress && progress}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="date">Date of Birth</Label>

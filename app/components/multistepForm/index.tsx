@@ -2,20 +2,19 @@
 
 import React from "react";
 import { useMultistepForm } from "@/app/hooks/useMultistepForm";
-import { Tabs, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
 import Step1 from "./formComponents/step1";
 import Step2 from "./formComponents/step2";
 import Step3 from "./formComponents/step3";
 import {
   useForm,
-  Controller,
   Control,
   FieldErrors,
-  Field,
   UseFormSetValue,
 } from "react-hook-form";
-import { Idata, IuserDocument } from "@/app/interfaces";
+import { Idata } from "@/app/interfaces";
+import { useAddDataToFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
+import { useRouter } from "next/navigation";
 
 export interface IformStepProps {
   control: Control<Idata>;
@@ -55,8 +54,14 @@ const Form = () => {
     <Step3 control={control} errors={errors} setValue={setValue} />,
   ]);
 
-  const submitHandler = (data: Idata) => {
+  const [addDataToFirebase] = useAddDataToFirebaseMutation();
+  const navigate = useRouter();
+
+  const submitHandler = async (data: Idata) => {
     console.log(data);
+    if (currentStep + 1 != totalStep) next();
+    await addDataToFirebase(data);
+    console.log("Done!!!");
   };
 
   return (
@@ -95,9 +100,7 @@ const Form = () => {
 
             <div className="flex gap-4 justify-end mt-4">
               {isFirstStep() ? null : <Button onClick={prev}>Prev</Button>}
-              <Button type="submit" onClick={next}>
-                {isLastStep() ? "Submit" : "Next"}
-              </Button>
+              <Button type="submit">{isLastStep() ? "Submit" : "Next"}</Button>
             </div>
           </form>
         </div>

@@ -15,5 +15,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Get firestore ref
 export const db = getFirestore(app);
+// Defining collection names
+export const collectionName = "students";
+// Get storage ref
 export const storage = getStorage(app);
