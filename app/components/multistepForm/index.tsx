@@ -14,7 +14,10 @@ import {
 } from "react-hook-form";
 import { Idata } from "@/app/interfaces";
 import { useAddDataToFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import { connectStorageEmulator } from "firebase/storage";
 
 export interface IformStepProps {
   control: Control<Idata>;
@@ -54,14 +57,17 @@ const Form = () => {
     <Step3 control={control} errors={errors} setValue={setValue} />,
   ]);
 
-  const [addDataToFirebase] = useAddDataToFirebaseMutation();
+  const [addDataToFirebase, { isLoading, isError, isSuccess }] =
+    useAddDataToFirebaseMutation();
   const navigate = useRouter();
 
   const submitHandler = async (data: Idata) => {
     console.log(data);
-    if (currentStep + 1 != totalStep) next();
+    if (currentStep + 1 != totalStep) {
+      next();
+      return;
+    }
     await addDataToFirebase(data);
-    console.log("Done!!!");
   };
 
   return (
@@ -86,7 +92,7 @@ const Form = () => {
               "Additional Information",
             ]).map((value, index) => (
               <div
-                // onClick={() => goTo(index)}
+                onClick={() => goTo(index)}
                 className={`text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
                   currentStep === index ? "text-zinc-900 bg-white " : ""
                 }`}
@@ -99,7 +105,17 @@ const Form = () => {
             {StepRender}
 
             <div className="flex gap-4 justify-end mt-4">
-              {isFirstStep() ? null : <Button onClick={prev}>Prev</Button>}
+              {isFirstStep() ? null : (
+                <Button
+                  type="button"
+                  onClick={() => {
+                    prev();
+                    console.log("Previous clicked");
+                  }}
+                >
+                  Previous
+                </Button>
+              )}
               <Button type="submit">{isLastStep() ? "Submit" : "Next"}</Button>
             </div>
           </form>

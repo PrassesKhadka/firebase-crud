@@ -20,7 +20,10 @@ export function useMultistepForm(
   // To navigate to previous form
   // if false returned then do not show prev button as first page of form
   function prev() {
-    if (!isFirstStep()) setCurrentStep((prev) => (prev = prev - 1));
+    if (!isFirstStep()) {
+      setCurrentStep((prev) => (prev = prev - 1));
+      console.log(currentStep);
+    }
   }
 
   // To navigate to next form

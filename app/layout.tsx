@@ -1,6 +1,5 @@
 import "./globals.css";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import StoreProvider from "./redux/StoreProvider";
 
 export default function RootLayout({
   children,
@@ -9,9 +8,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Provider store={store}>
+      <StoreProvider>
         <body>{children}</body>
-      </Provider>
+      </StoreProvider>
     </html>
   );
 }
