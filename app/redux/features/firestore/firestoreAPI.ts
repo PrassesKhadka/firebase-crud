@@ -30,6 +30,8 @@ export const firestoreApi = createApi({
           querySnapshot.forEach((doc) => {
             studentData.push({ ...doc.data() } as IuserDocument);
           });
+          console.log(studentData);
+          console.log("HI");
           return { data: studentData };
         } catch (e) {
           console.log(e);

@@ -14,10 +14,6 @@ import {
 } from "react-hook-form";
 import { Idata } from "@/app/interfaces";
 import { useAddDataToFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
-import { Bounce, ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/navigation";
-import { connectStorageEmulator } from "firebase/storage";
 
 export interface IformStepProps {
   control: Control<Idata>;
@@ -59,7 +55,6 @@ const Form = () => {
 
   const [addDataToFirebase, { isLoading, isError, isSuccess }] =
     useAddDataToFirebaseMutation();
-  const navigate = useRouter();
 
   const submitHandler = async (data: Idata) => {
     console.log(data);
