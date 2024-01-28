@@ -41,29 +41,30 @@ export const firestoreApi = createApi({
     }),
     // To fetch only 10 data
     fetchNextLimitedDataFromFirebase: builder.query({
-      async queryFn(recordsEachPage: number) {
+      // queryFn only takes one argument so pass an object instead
+      async queryFn({ pageSize = 5 }) {
         try {
           // Query the first page of docs
           const first = query(
             collection(db, collectionName),
             orderBy("createdAt", "desc"),
-            limit(recordsEachPage)
+            limit(pageSize)
           );
           const documentSnapshots = await getDocs(first);
-
+          let eachPageStudentData: IuserDocument[] = [];
           // Get the last visible document
           const lastVisible =
             documentSnapshots.docs[documentSnapshots.docs.length - 1];
-
-          // Construct a new query starting at this document,
-          // get the next 25 cities.
           const next = query(
             collection(db, collectionName),
             orderBy("createdAt", "desc"),
             startAfter(lastVisible),
-            limit(recordsEachPage)
+            limit(pageSize)
           );
-          return { data: "ok" };
+          documentSnapshots.docs.forEach((doc) =>
+            eachPageStudentData.push({ ...doc.data() } as IuserDocument)
+          );
+          return { data: eachPageStudentData };
         } catch (e) {
           console.log(e);
           return { error: e };
@@ -91,5 +92,8 @@ export const firestoreApi = createApi({
   }),
 });
 
-export const { useAddDataToFirebaseMutation, useFetchDataFromFirebaseQuery } =
-  firestoreApi;
+export const {
+  useAddDataToFirebaseMutation,
+  useFetchDataFromFirebaseQuery,
+  useFetchNextLimitedDataFromFirebaseQuery,
+} = firestoreApi;

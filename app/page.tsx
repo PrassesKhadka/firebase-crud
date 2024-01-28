@@ -2,15 +2,21 @@
 import ReactTable from "./components/Table/Table";
 import { type ColumnDef } from "@tanstack/react-table";
 import { IuserDocument } from "./interfaces";
-import { ReactNode, useEffect } from "react";
-import { useFetchDataFromFirebaseQuery } from "./redux/features/firestore/firestoreAPI";
+import { ReactNode } from "react";
+import {
+  useFetchDataFromFirebaseQuery,
+  useFetchNextLimitedDataFromFirebaseQuery,
+} from "./redux/features/firestore/firestoreAPI";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { PascalCase } from "./utils/pascalCase";
 
 export default function Home() {
   const { data } = useFetchDataFromFirebaseQuery("");
   console.log(data);
-
+  const { data: eachPageData } = useFetchNextLimitedDataFromFirebaseQuery({
+    pageSize: 10,
+  });
+  console.log(eachPageData);
   const columns: ColumnDef<IuserDocument>[] = [
     {
       header: "",

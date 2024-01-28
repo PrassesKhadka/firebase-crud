@@ -20,7 +20,7 @@ const Step1 = ({ control, errors }: IformStepProps) => {
                 render={({ field: { value, onChange } }) => (
                   <Input
                     value={value}
-                    // input kei change garyo bhaney state register huncha ani value retain huncha
+                    // input keY change garyo bhaney state register huncha ani value retain huncha
                     onChange={onChange}
                     id="first-name"
                     placeholder="John"

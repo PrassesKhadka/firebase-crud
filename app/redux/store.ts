@@ -3,10 +3,12 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { firestoreApi } from "./features/firestore/firestoreAPI";
+import firestoreSlice from "./features/firestore/firestoreSlice";
 
 export const store = () => {
   return configureStore({
     reducer: {
+      firestore: firestoreSlice,
       [firestoreApi.reducerPath]: firestoreApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
