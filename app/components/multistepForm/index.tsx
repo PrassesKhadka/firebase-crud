@@ -14,6 +14,7 @@ import {
 } from "react-hook-form";
 import { Idata } from "@/app/interfaces";
 import { useAddDataToFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
+import { useRouter } from "next/navigation";
 
 export interface IformStepProps {
   control: Control<Idata>;
@@ -48,11 +49,12 @@ const Form = () => {
     next,
     goTo,
   } = useMultistepForm([
-    <Step1 control={control} errors={errors} />,
-    <Step2 control={control} errors={errors} />,
-    <Step3 control={control} errors={errors} setValue={setValue} />,
+    <Step1 control={control} errors={errors} key={1} />,
+    <Step2 control={control} errors={errors} key={2} />,
+    <Step3 control={control} errors={errors} setValue={setValue} key={3} />,
   ]);
 
+  const router = useRouter();
   const [addDataToFirebase, { isLoading, isError, isSuccess }] =
     useAddDataToFirebaseMutation();
 
@@ -63,6 +65,7 @@ const Form = () => {
       return;
     }
     await addDataToFirebase(data);
+    router.push("/");
   };
 
   return (
@@ -88,6 +91,7 @@ const Form = () => {
             ]).map((value, index) => (
               <div
                 onClick={() => goTo(index)}
+                key={index}
                 className={`text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
                   currentStep === index ? "text-zinc-900 bg-white " : ""
                 }`}
@@ -111,7 +115,9 @@ const Form = () => {
                   Previous
                 </Button>
               )}
-              <Button type="submit">{isLastStep() ? "Submit" : "Next"}</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Loading..." : isLastStep() ? "Submit" : "Next"}
+              </Button>
             </div>
           </form>
         </div>

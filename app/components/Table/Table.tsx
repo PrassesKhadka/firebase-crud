@@ -38,7 +38,7 @@ const ReactTable = <T,>({
 
   useEffect(() => {
     table.setPageSize(pageSize);
-  }, []);
+  }, [pageSize]);
 
   return (
     <>

@@ -9,14 +9,13 @@ import {
 } from "./redux/features/firestore/firestoreAPI";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { PascalCase } from "./utils/pascalCase";
+import { DataTableSkeleton } from "./components/Skeleton";
 
 export default function Home() {
   const { data } = useFetchDataFromFirebaseQuery("");
+
   console.log(data);
-  const { data: eachPageData } = useFetchNextLimitedDataFromFirebaseQuery({
-    pageSize: 10,
-  });
-  console.log(eachPageData);
+
   const columns: ColumnDef<IuserDocument>[] = [
     {
       header: "",
@@ -55,11 +54,13 @@ export default function Home() {
       ),
     },
   ];
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between py-4">
-      {/* <Form /> */}
-      <ReactTable columns={columns} data={data ?? []} />
+    <main className="">
+      {!data || data.length === 0 ? (
+        <DataTableSkeleton columnCount={6} rowCount={5} />
+      ) : (
+        <ReactTable columns={columns} data={data ?? []} />
+      )}
     </main>
   );
 }

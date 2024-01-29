@@ -9,7 +9,6 @@ import {
   query,
   orderBy,
   startAfter,
-  QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { Idata, IuserDocument } from "@/app/interfaces";
 
@@ -25,13 +24,13 @@ export const firestoreApi = createApi({
       async queryFn() {
         try {
           const collectionRef = collection(db, collectionName);
-          const querySnapshot = await getDocs(collectionRef);
+          const queryRef = query(collectionRef, orderBy("createdAt", "desc"));
+          const querySnapshot = await getDocs(queryRef);
           let studentData: IuserDocument[] = [];
           querySnapshot.forEach((doc) => {
-            studentData.push({ ...doc.data() } as IuserDocument);
+            studentData.push({ id: doc.id, ...doc.data() } as IuserDocument);
           });
-          console.log(studentData);
-          console.log("HI");
+
           return { data: studentData };
         } catch (e) {
           console.log(e);
@@ -39,7 +38,7 @@ export const firestoreApi = createApi({
         }
       },
     }),
-    // To fetch only 10 data
+    // To fetch only 5 data
     fetchNextLimitedDataFromFirebase: builder.query({
       // queryFn only takes one argument so pass an object instead
       async queryFn({ pageSize = 5 }) {
@@ -77,7 +76,7 @@ export const firestoreApi = createApi({
       async queryFn(data: Idata) {
         try {
           const collectionRef = collection(db, collectionName);
-          const actuallData: IuserDocument = {
+          const actuallData: Omit<IuserDocument, "id"> = {
             data,
             createdAt: serverTimestamp(),
             lastUpdatedAt: serverTimestamp(),

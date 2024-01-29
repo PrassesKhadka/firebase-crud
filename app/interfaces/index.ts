@@ -32,6 +32,7 @@ export interface Idata {
 }
 
 export interface IuserDocument {
+  id: string;
   data: Idata;
   createdAt: FieldValue;
   lastUpdatedAt: FieldValue;
