@@ -1,12 +1,10 @@
-import React from "react";
 import { DataTableSkeleton } from "@/app/components/Skeleton";
+import React from "react";
 
-const Loading = () => {
+export default function Loading() {
   return (
     <>
-      <DataTableSkeleton columnCount={6} rowCount={5} />;
+      <DataTableSkeleton columnCount={5} rowCount={5} />
     </>
   );
-};
-
-export default Loading;
+}

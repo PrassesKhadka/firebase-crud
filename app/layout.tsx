@@ -10,9 +10,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <StoreProvider>
-        <body className="flex min-h-screen flex-col items-center justify-between py-4">
+        <body className="flex min-h-screen flex-col items-center gap-10  py-4">
           <Sidebar />
-          {children}
+          <main className="absolute left-[25%]">{children}</main>
         </body>
       </StoreProvider>
     </html>

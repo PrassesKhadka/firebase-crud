@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useMultistepForm } from "@/app/hooks/useMultistepForm";
 import { Button } from "@/components/ui/button";
 import Step1 from "./formComponents/step1";
@@ -13,7 +13,11 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import { Idata, IuserDocument } from "@/app/interfaces";
-import { useAddDataToFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
+import {
+  useAddDataToFirebaseMutation,
+  useUpdateDatafromFirebaseMutation,
+  useFetchNextLimitedDataFromFirebaseQuery,
+} from "@/app/redux/features/firestore/firestoreAPI";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export interface IformStepProps {
@@ -23,26 +27,28 @@ export interface IformStepProps {
 }
 
 export interface IformArg {
-  studentData?: IuserDocument;
+  id?: string;
 }
 
-const Form = ({ studentData }: IformArg) => {
+const Form = ({ id }: IformArg) => {
+  // This is the IuserDocument data the state of form/react hook form is Idata so we need this store it
+  const userData = useRef<IuserDocument>();
+  const { data } = useFetchNextLimitedDataFromFirebaseQuery({});
+  useEffect(() => {
+    if (!id) return;
+    const idData = data?.find((obj) => obj.id === id);
+    if (!idData) return;
+    userData.current = idData;
+    reset({ ...idData.data });
+  }, []);
+
   const {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
-  } = useForm<Idata>({
-    defaultValues: {
-      ...studentData,
-      additionalInfo: {
-        photo: {
-          name: "avatar.png",
-          url: "https://firebasestorage.googleapis.com/v0/b/fir-crud-6aeba.appspot.com/o/avatar.png?alt=media&token=fb323f51-1517-4931-a55d-8f8b05d274de",
-        },
-      },
-    },
-  });
+  } = useForm<Idata>();
 
   const {
     currentStep,
@@ -60,8 +66,12 @@ const Form = ({ studentData }: IformArg) => {
   ]);
 
   const router = useRouter();
-  const [addDataToFirebase, { isLoading, isError, isSuccess }] =
-    useAddDataToFirebaseMutation();
+  const [
+    addDataToFirebase,
+    { isLoading: isLoadingForAddingData, isError, isSuccess },
+  ] = useAddDataToFirebaseMutation();
+  const [updateDataFromFirebase, { isLoading: isLoadingForEditingData }] =
+    useUpdateDatafromFirebaseMutation();
 
   const submitHandler = async (data: Idata) => {
     console.log(data);
@@ -69,8 +79,17 @@ const Form = ({ studentData }: IformArg) => {
       next();
       return;
     }
-    await addDataToFirebase(data);
-    router.push("/");
+    if (id) {
+      if (!userData.current) return;
+      console.log(userData.current);
+      await updateDataFromFirebase({
+        documentObj: userData.current,
+        updatedObj: data,
+      });
+    } else {
+      await addDataToFirebase(data);
+    }
+    router.push("/dashboard");
   };
 
   return (
@@ -119,8 +138,15 @@ const Form = ({ studentData }: IformArg) => {
                   Previous
                 </Button>
               )}
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Loading..." : isLastStep() ? "Submit" : "Next"}
+              <Button
+                type="submit"
+                disabled={isLoadingForAddingData || isLoadingForEditingData}
+              >
+                {isLoadingForAddingData || isLoadingForEditingData
+                  ? "Loading..."
+                  : isLastStep()
+                  ? "Submit"
+                  : "Next"}
               </Button>
             </div>
           </form>

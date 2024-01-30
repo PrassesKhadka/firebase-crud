@@ -13,14 +13,27 @@ import {
   getDoc,
   doc,
   updateDoc,
+  QueryDocumentSnapshot,
+  DocumentSnapshot,
+  DocumentData,
 } from "firebase/firestore";
 import { Idata, IuserDocument } from "@/app/interfaces";
 
 interface IeditArg {
   documentObj: IuserDocument;
-  updatedObj: Partial<IuserDocument>;
+  updatedObj: Idata;
+}
+interface IfetchNextDataArg {
+  pageSize?: number;
 }
 
+// If you call the same useQuery hook with the same arguments in
+// another component, those two will share the cache entry
+// and return exactly the same data - it will not trigger another
+// request to the server.
+// So basically this querying is like putting data in redux state so basically you can
+// can call this hook and use it everywhere
+// So: just useQuery everywhere you need it :)
 // Since we are not fetching data from an api,we use fakeBaseQuery instead of fetchBaseQuery
 //  and also queryFn instead of query
 export const firestoreApi = createApi({
@@ -50,7 +63,7 @@ export const firestoreApi = createApi({
     // To fetch only 5 data
     fetchNextLimitedDataFromFirebase: builder.query({
       // queryFn only takes one argument so pass an object instead
-      async queryFn({ pageSize = 5 }) {
+      async queryFn({ pageSize = 5 }: IfetchNextDataArg) {
         try {
           // Query the first page of docs
           const first = query(
@@ -70,7 +83,10 @@ export const firestoreApi = createApi({
             limit(pageSize)
           );
           documentSnapshots.docs.forEach((doc) =>
-            eachPageStudentData.push({ ...doc.data() } as IuserDocument)
+            eachPageStudentData.push({
+              id: doc.id,
+              ...doc.data(),
+            } as IuserDocument)
           );
           return { data: eachPageStudentData };
         } catch (e) {
@@ -97,17 +113,18 @@ export const firestoreApi = createApi({
         }
       },
     }),
-    // To edit data:
 
-    editDatafromFirebase: builder.mutation({
-      async queryFn({ documentObj, updatedObj }: IeditArg) {
+    // To update data:
+    updateDatafromFirebase: builder.mutation({
+      async queryFn({ documentObj, updatedObj: data }: IeditArg) {
         try {
           const collectionRef = collection(db, collectionName);
           const documentRef = doc(collectionRef, documentObj.id);
           await updateDoc(documentRef, {
-            updatedObj,
+            ...documentObj,
+            data,
             lastUpdatedAt: serverTimestamp(),
-          } as Partial<IuserDocument>);
+          } satisfies IuserDocument);
 
           return { data: "ok" };
         } catch (e) {
@@ -122,5 +139,5 @@ export const {
   useAddDataToFirebaseMutation,
   useFetchDataFromFirebaseQuery,
   useFetchNextLimitedDataFromFirebaseQuery,
-  useEditDatafromFirebaseMutation,
+  useUpdateDatafromFirebaseMutation,
 } = firestoreApi;

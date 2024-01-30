@@ -12,8 +12,7 @@ interface Object {
 const EditForm = ({ params }: Props) => {
   return (
     <>
-      {params.id}
-      <Form />
+      <Form id={params.id} />
     </>
   );
 };
