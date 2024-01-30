@@ -1,51 +1,19 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import React, { Suspense } from "react";
-import { getPaginatedData } from "./getPaginatedData";
+import React from "react";
+import { useFetchDataFromFirebaseQuery } from "@/app/redux/features/firestore/firestoreAPI";
+import ReactTable from "@/app/components/Table/Table";
+import { columns } from "@/app/components/Table/columns";
 
-// Server side component for server side pagination
-export interface IpageSearchParams {
-  page?: string;
-  sort_by?: string;
-  sort_order?: "asc" | "desc";
-}
+const Dashboard = () => {
+  // If you call the same useQuery hook with the same arguments in
+  // another component, those two will share the cache entry
+  // and return exactly the same data - it will not trigger another
+  // request to the server.
+  // So: just useQuery everywhere you need it :)
 
-type DashboardProps = {
-  // params: IpageSearchParams;
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-// For server components searchParams are declared as a props
-// But for client components, we extract searchParams using useSearchParams() hook
-// which is provided out of the box by next js
-const Dashboard: React.FC<DashboardProps> = async ({ searchParams }) => {
-  // We are basically using the search params as the state
-  const currentPage =
-    typeof searchParams.page === "string" ? Number(searchParams.page) : 1;
-  const eachPage =
-    typeof searchParams.limit === "string" ? Number(searchParams.limit) : 5;
-
-  const studentData = getPaginatedData({
-    currentPage,
-    eachPage,
-  });
-  // const columns = getColumnData();
-
+  const { data } = useFetchDataFromFirebaseQuery("");
   return (
     <>
-      {/* {studentData[0].data.personalInfo.name ?? ""} */}
-      {/* <ReactTable data={studentData} columns={columns} /> */}
-      <Link
-        href={`?page=${
-          currentPage > 1 ? currentPage - 1 : 1
-        }&limit=${eachPage}`}
-      >
-        <Button>Previous</Button>
-      </Link>
-      <Link href={`?page=${currentPage + 1}&limit=${eachPage}`}>
-        <Button>Next</Button>
-      </Link>
-      <h1>{searchParams.page}</h1>
+      <ReactTable columns={columns} data={data ?? []} />
     </>
   );
 };

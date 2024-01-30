@@ -7,10 +7,19 @@ import {
   serverTimestamp,
   limit,
   query,
+  where,
   orderBy,
   startAfter,
+  getDoc,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 import { Idata, IuserDocument } from "@/app/interfaces";
+
+interface IeditArg {
+  documentObj: IuserDocument;
+  updatedObj: Partial<IuserDocument>;
+}
 
 // Since we are not fetching data from an api,we use fakeBaseQuery instead of fetchBaseQuery
 //  and also queryFn instead of query
@@ -88,6 +97,24 @@ export const firestoreApi = createApi({
         }
       },
     }),
+    // To edit data:
+
+    editDatafromFirebase: builder.mutation({
+      async queryFn({ documentObj, updatedObj }: IeditArg) {
+        try {
+          const collectionRef = collection(db, collectionName);
+          const documentRef = doc(collectionRef, documentObj.id);
+          await updateDoc(documentRef, {
+            updatedObj,
+            lastUpdatedAt: serverTimestamp(),
+          } as Partial<IuserDocument>);
+
+          return { data: "ok" };
+        } catch (e) {
+          return { error: e };
+        }
+      },
+    }),
   }),
 });
 
@@ -95,4 +122,5 @@ export const {
   useAddDataToFirebaseMutation,
   useFetchDataFromFirebaseQuery,
   useFetchNextLimitedDataFromFirebaseQuery,
+  useEditDatafromFirebaseMutation,
 } = firestoreApi;

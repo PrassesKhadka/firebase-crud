@@ -12,9 +12,9 @@ import {
   FieldErrors,
   UseFormSetValue,
 } from "react-hook-form";
-import { Idata } from "@/app/interfaces";
+import { Idata, IuserDocument } from "@/app/interfaces";
 import { useAddDataToFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export interface IformStepProps {
   control: Control<Idata>;
@@ -22,7 +22,11 @@ export interface IformStepProps {
   setValue?: UseFormSetValue<Idata>;
 }
 
-const Form = () => {
+export interface IformArg {
+  studentData?: IuserDocument;
+}
+
+const Form = ({ studentData }: IformArg) => {
   const {
     handleSubmit,
     control,
@@ -30,6 +34,7 @@ const Form = () => {
     formState: { errors },
   } = useForm<Idata>({
     defaultValues: {
+      ...studentData,
       additionalInfo: {
         photo: {
           name: "avatar.png",
@@ -109,7 +114,6 @@ const Form = () => {
                   type="button"
                   onClick={() => {
                     prev();
-                    console.log("Previous clicked");
                   }}
                 >
                   Previous
