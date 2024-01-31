@@ -29,11 +29,16 @@ const ReactTable = <T,>({
   columns,
   pageSize = 5,
 }: ReactTableProps<T>) => {
+  // const [rowSelection, setRowSelection] = useState({});
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    // state: {
+    //   rowSelection,
+    // },
+    // onRowSelectionChange: setRowSelection,
   });
 
   useEffect(() => {

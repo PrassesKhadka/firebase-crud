@@ -68,10 +68,12 @@ const Form = ({ id }: IformArg) => {
   const router = useRouter();
   const [
     addDataToFirebase,
-    { isLoading: isLoadingForAddingData, isError, isSuccess },
+    { isLoading: isLoadingForAddingData, isSuccess: isSuccessForAddingData },
   ] = useAddDataToFirebaseMutation();
-  const [updateDataFromFirebase, { isLoading: isLoadingForEditingData }] =
-    useUpdateDatafromFirebaseMutation();
+  const [
+    updateDataFromFirebase,
+    { isLoading: isLoadingForEditingData, isSuccess: isSuccessForEditingData },
+  ] = useUpdateDatafromFirebaseMutation();
 
   const submitHandler = async (data: Idata) => {
     console.log(data);
@@ -140,7 +142,12 @@ const Form = ({ id }: IformArg) => {
               )}
               <Button
                 type="submit"
-                disabled={isLoadingForAddingData || isLoadingForEditingData}
+                disabled={
+                  isLoadingForAddingData ||
+                  isLoadingForEditingData ||
+                  isSuccessForAddingData ||
+                  isSuccessForEditingData
+                }
               >
                 {isLoadingForAddingData || isLoadingForEditingData
                   ? "Loading..."
