@@ -18,6 +18,7 @@ import { Copy, Edit, Heart, Trash } from "lucide-react";
 import { IuserDocument } from "@/app/interfaces";
 import { PascalCase } from "@/app/utils/pascalCase";
 import Link from "next/link";
+import { useDeleteDataFromFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
 
 interface DataTableRowActionsProps {
   row: Row<IuserDocument>;
@@ -29,6 +30,8 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
     string1: data.personalInfo.name.firstName,
     string2: data.personalInfo.name.lastName,
   });
+  const [deleteDataFromFirebase, { isLoading, isError, isSuccess }] =
+    useDeleteDataFromFirebaseMutation();
 
   return (
     <DropdownMenu>
@@ -68,8 +71,8 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           <Heart className="text-green-500 w-4 h-6" />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <div className="flex justify-between items-center">
+        <DropdownMenuItem onClick={() => deleteDataFromFirebase({ id })}>
+          <div className="flex justify-between items-center cursor-pointer">
             Delete
             <Trash className="text-red-500 w-4 h-6" />
           </div>

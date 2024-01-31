@@ -16,6 +16,7 @@ import {
   QueryDocumentSnapshot,
   DocumentSnapshot,
   DocumentData,
+  deleteDoc,
 } from "firebase/firestore";
 import { Idata, IuserDocument } from "@/app/interfaces";
 
@@ -132,6 +133,20 @@ export const firestoreApi = createApi({
         }
       },
     }),
+
+    // To delete data:
+    deleteDataFromFirebase: builder.mutation({
+      async queryFn({ id }) {
+        try {
+          const collectionRef = collection(db, collectionName);
+          const documentRef = doc(collectionRef, id);
+          await deleteDoc(documentRef);
+          return { data: "ok" };
+        } catch (e) {
+          return { error: e };
+        }
+      },
+    }),
   }),
 });
 
@@ -140,4 +155,5 @@ export const {
   useFetchDataFromFirebaseQuery,
   useFetchNextLimitedDataFromFirebaseQuery,
   useUpdateDatafromFirebaseMutation,
+  useDeleteDataFromFirebaseMutation,
 } = firestoreApi;
