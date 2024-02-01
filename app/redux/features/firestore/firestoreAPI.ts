@@ -46,6 +46,9 @@ interface IdeleteArg {
 export const firestoreApi = createApi({
   reducerPath: "firestoreApi",
   baseQuery: fakeBaseQuery(),
+  // This helps us to do automatic refetching when some changes takes place in our firestore database
+  // for query we use: providesTags and for mutations invalidatesTags
+  tagTypes: ["Firestore"],
   endpoints: (builder) => ({
     // To fetch all data
     fetchDataFromFirebase: builder.query({
@@ -66,12 +69,15 @@ export const firestoreApi = createApi({
           return { error: e };
         }
       },
+      providesTags: ["Firestore"],
     }),
+
     // To fetch only 5 data
     fetchNextLimitedDataFromFirebase: builder.query({
       // queryFn only takes one argument so pass an object instead
       async queryFn({ pageSize = 10 }: IfetchNextDataArg) {
         try {
+          let eachPageStudentData: IuserDocument[] = [];
           // Query the first page of docs
           const first = query(
             collection(db, collectionName),
@@ -79,7 +85,6 @@ export const firestoreApi = createApi({
             limit(pageSize)
           );
           const documentSnapshots = await getDocs(first);
-          let eachPageStudentData: IuserDocument[] = [];
           // // Get the last visible document
           // const lastVisible =
           //   documentSnapshots.docs[documentSnapshots.docs.length - 1];
@@ -101,7 +106,9 @@ export const firestoreApi = createApi({
           return { error: e };
         }
       },
+      providesTags: ["Firestore"],
     }),
+
     // To add Data
     addDataToFirebase: builder.mutation({
       // a queryFn should return something otherwise error will occur
@@ -119,6 +126,7 @@ export const firestoreApi = createApi({
           return { error: e };
         }
       },
+      invalidatesTags: ["Firestore"],
     }),
 
     // To update data:
@@ -138,18 +146,20 @@ export const firestoreApi = createApi({
           return { error: e };
         }
       },
+      invalidatesTags: ["Firestore"],
     }),
 
     // To delete data: Also delete the photo of user in fire storage
     deleteDataFromFirebase: builder.mutation({
       async queryFn({ ids, photoName }: IdeleteArg) {
+        console.log(ids);
         console.log(photoName);
         try {
           const collectionRef = collection(db, collectionName);
           ids.forEach(async (id) => {
             const documentRef = doc(collectionRef, id);
             await deleteDoc(documentRef);
-            if (photoName === "avatar.png") return;
+            if (photoName === "avatar") return;
             // To also delete the photo of the user stored in fire storage
             const storageRef = ref(storage, photoName);
             await deleteObject(storageRef);
@@ -159,6 +169,7 @@ export const firestoreApi = createApi({
           return { error: e };
         }
       },
+      invalidatesTags: ["Firestore"],
     }),
   }),
 });
