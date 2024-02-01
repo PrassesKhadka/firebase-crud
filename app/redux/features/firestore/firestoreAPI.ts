@@ -149,7 +149,7 @@ export const firestoreApi = createApi({
           ids.forEach(async (id) => {
             const documentRef = doc(collectionRef, id);
             await deleteDoc(documentRef);
-            if (photoName === "avatar") return;
+            if (photoName === "avatar.png") return;
             // To also delete the photo of the user stored in fire storage
             const storageRef = ref(storage, photoName);
             await deleteObject(storageRef);

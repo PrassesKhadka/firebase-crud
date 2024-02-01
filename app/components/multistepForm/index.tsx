@@ -40,7 +40,7 @@ const Form = () => {
   const { id } = params;
   // This is the IuserDocument data the state of form/react hook form is Idata so we need this store it
   const userData = useRef<IuserDocument>();
-  const { data } = useFetchNextLimitedDataFromFirebaseQuery("");
+  const { data } = useFetchNextLimitedDataFromFirebaseQuery({});
   useEffect(() => {
     if (!id) return;
     const idData = data?.find((obj) => obj.id === id);

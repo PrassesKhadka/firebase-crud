@@ -7,11 +7,10 @@ import {
 } from "@/app/redux/features/firestore/firestoreAPI";
 import ReactTable from "@/app/components/Table/Table";
 import { columns } from "@/app/components/Table/columns";
-import { DataTableSkeleton } from "@/app/components/Skeleton";
 
 export default async function Dashboard() {
   const { data, isError, isLoading, isSuccess } =
-    useFetchNextLimitedDataFromFirebaseQuery("");
+    useFetchNextLimitedDataFromFirebaseQuery({});
 
   return (
     <>

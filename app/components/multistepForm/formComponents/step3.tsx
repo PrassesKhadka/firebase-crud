@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,11 +20,13 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 const Step3 = ({ control, errors, setValue, getValues }: IformStepProps) => {
   const [file, setFile] = useState<any>();
   const [progress, setProgress] = useState<string>("");
+  const fileName = useRef<string>("");
 
   useEffect(() => {
     if (!file) return;
     const upload = () => {
-      const storageRef = ref(storage, new Date().getTime() + file.name);
+      fileName.current = new Date().getTime() + file.name;
+      const storageRef = ref(storage, fileName.current);
 
       const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -49,10 +51,7 @@ const Step3 = ({ control, errors, setValue, getValues }: IformStepProps) => {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setValue?.("additionalInfo.photo.url", downloadURL);
-            setValue?.(
-              "additionalInfo.photo.name",
-              file.name + "." + file.type
-            );
+            setValue?.("additionalInfo.photo.name", fileName.current);
           });
         }
       );
