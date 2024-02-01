@@ -11,6 +11,7 @@ import {
   Control,
   FieldErrors,
   UseFormSetValue,
+  UseFormGetValues,
 } from "react-hook-form";
 import { Idata, IuserDocument } from "@/app/interfaces";
 import {
@@ -18,37 +19,53 @@ import {
   useUpdateDatafromFirebaseMutation,
   useFetchNextLimitedDataFromFirebaseQuery,
 } from "@/app/redux/features/firestore/firestoreAPI";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 export interface IformStepProps {
   control: Control<Idata>;
   errors: FieldErrors<Idata>;
   setValue?: UseFormSetValue<Idata>;
+  getValues?: UseFormGetValues<Idata>;
 }
 
-export interface IformArg {
-  id?: string;
+interface Props {
+  params: Object;
+}
+interface Object {
+  id: string;
 }
 
-const Form = ({ id }: IformArg) => {
+const Form = () => {
+  const params = useParams();
+  const { id } = params;
   // This is the IuserDocument data the state of form/react hook form is Idata so we need this store it
   const userData = useRef<IuserDocument>();
-  const { data } = useFetchNextLimitedDataFromFirebaseQuery({});
+  const { data } = useFetchNextLimitedDataFromFirebaseQuery("");
   useEffect(() => {
     if (!id) return;
     const idData = data?.find((obj) => obj.id === id);
     if (!idData) return;
     userData.current = idData;
     reset({ ...idData.data });
-  }, []);
+  }, [id]);
 
   const {
     handleSubmit,
     control,
     setValue,
+    getValues,
     reset,
     formState: { errors },
-  } = useForm<Idata>();
+  } = useForm<Idata>({
+    defaultValues: {
+      additionalInfo: {
+        photo: {
+          name: "avatar",
+          url: "https://firebasestorage.googleapis.com/v0/b/fir-crud-6aeba.appspot.com/o/avatar.png?alt=media&token=fb323f51-1517-4931-a55d-8f8b05d274de",
+        },
+      },
+    },
+  });
 
   const {
     currentStep,
@@ -62,7 +79,13 @@ const Form = ({ id }: IformArg) => {
   } = useMultistepForm([
     <Step1 control={control} errors={errors} key={1} />,
     <Step2 control={control} errors={errors} key={2} />,
-    <Step3 control={control} errors={errors} setValue={setValue} key={3} />,
+    <Step3
+      control={control}
+      errors={errors}
+      setValue={setValue}
+      getValues={getValues}
+      key={3}
+    />,
   ]);
 
   const router = useRouter();
@@ -116,7 +139,7 @@ const Form = ({ id }: IformArg) => {
               "Additional Information",
             ]).map((value, index) => (
               <div
-                onClick={() => goTo(index)}
+                // onClick={() => goTo(index)}
                 key={index}
                 className={`text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
                   currentStep === index ? "text-zinc-900 bg-white " : ""

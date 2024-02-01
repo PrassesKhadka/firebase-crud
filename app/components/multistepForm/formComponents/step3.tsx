@@ -17,7 +17,7 @@ import { Controller } from "react-hook-form";
 import { storage } from "@/app/firebase/initialise";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-const Step3 = ({ control, errors, setValue }: IformStepProps) => {
+const Step3 = ({ control, errors, setValue, getValues }: IformStepProps) => {
   const [file, setFile] = useState<any>();
   const [progress, setProgress] = useState<string>("");
 
@@ -49,7 +49,10 @@ const Step3 = ({ control, errors, setValue }: IformStepProps) => {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setValue?.("additionalInfo.photo.url", downloadURL);
-            setValue?.("additionalInfo.photo.name", file.name);
+            setValue?.(
+              "additionalInfo.photo.name",
+              file.name + "." + file.type
+            );
           });
         }
       );
@@ -65,6 +68,7 @@ const Step3 = ({ control, errors, setValue }: IformStepProps) => {
             <Label htmlFor="photo">Photo (Optional)</Label>
             <Input
               onChange={(e) => setFile(e.target.files?.[0])}
+              title={getValues?.("additionalInfo.photo.name") ?? "avatar.png"}
               id="photo"
               accept="image/png"
               type="file"

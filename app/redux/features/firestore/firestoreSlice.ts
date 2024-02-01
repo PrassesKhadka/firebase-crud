@@ -4,27 +4,20 @@ import { useAppSelector, type RootState } from "../../store";
 import { IuserDocument } from "@/app/interfaces";
 
 // Define a type for the slice state
-interface firestoreState {
-  studentData: IuserDocument[];
-}
+
+interface firestoreState {}
 
 // Define the initial state using that type
-const initialState: firestoreState = {
-  studentData: [],
-};
+const initialState: firestoreState = {};
 
 export const firestoreSlice = createSlice({
   name: "firestore",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {
-    add: (state, action: PayloadAction<IuserDocument>) => {
-      state.studentData.push(action.payload);
-    },
-  },
+  reducers: {},
 });
 
-export const { add } = firestoreSlice.actions;
+export const {} = firestoreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 // You can access studentData like this as well instead of useAppSelector but you have to give the argument

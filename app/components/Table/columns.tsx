@@ -4,7 +4,8 @@ import { ReactNode } from "react";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { PascalCase } from "@/app/utils/pascalCase";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableRowActions } from "./data-table-row-actions";
+import { DataTableRowActions } from "./data-table-actions/row-actions";
+import { DataTableMultipleRowActions } from "./data-table-actions/multiple-row-actions";
 
 export const columns: ColumnDef<IuserDocument>[] = [
   {
@@ -15,6 +16,9 @@ export const columns: ColumnDef<IuserDocument>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
+        // !!-> converts string or any other data structure to boolean
+        // Eg: const value = "hello";const booleanValue = !!value; // true
+        // Since non-empty strings are truthy in JavaScript
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
         className="translate-y-[2px] mr-2"
@@ -71,6 +75,13 @@ export const columns: ColumnDef<IuserDocument>[] = [
   },
   {
     id: "actions",
+    header: ({ table }) => (
+      <DataTableMultipleRowActions
+        isSomeRowsSelected={table.getIsSomeRowsSelected()}
+        isAllRowsSelected={table.getIsAllRowsSelected()}
+        selectedRows={table.getState().rowSelection}
+      />
+    ),
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
