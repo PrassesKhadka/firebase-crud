@@ -6,6 +6,9 @@ import { PascalCase } from "@/app/utils/pascalCase";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableRowActions } from "./data-table-actions/row-actions";
 import { DataTableMultipleRowActions } from "./data-table-actions/multiple-row-actions";
+import FavouriteRow from "./data-table-actions/favourite-row-actions";
+import { HeartIcon } from "@radix-ui/react-icons";
+import FavouriteRowMultipleAction from "./data-table-actions/favourite-multiple-row-actions";
 
 export const columns: ColumnDef<IuserDocument>[] = [
   {
@@ -83,5 +86,10 @@ export const columns: ColumnDef<IuserDocument>[] = [
       />
     ),
     cell: ({ row }) => <DataTableRowActions row={row} />,
+  },
+  {
+    id: "favourite",
+    header: ({ table }) => <FavouriteRowMultipleAction table={table} />,
+    cell: ({ row }) => <FavouriteRow row={row} />,
   },
 ];

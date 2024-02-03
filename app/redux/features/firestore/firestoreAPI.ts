@@ -17,6 +17,7 @@ import {
   DocumentSnapshot,
   DocumentData,
   deleteDoc,
+  deleteField,
 } from "firebase/firestore";
 import { Idata, IuserDocument } from "@/app/interfaces";
 import { deleteObject, ref } from "firebase/storage";
@@ -34,6 +35,9 @@ interface IdeleteArg {
   photoName: string;
 }
 
+interface IaddToFavouriteArg {
+  ids: string[];
+}
 // If you call the same useQuery hook with the same arguments in
 // another component, those two will share the cache entry
 // and return exactly the same data - it will not trigger another
@@ -152,8 +156,6 @@ export const firestoreApi = createApi({
     // To delete data: Also delete the photo of user in fire storage
     deleteDataFromFirebase: builder.mutation({
       async queryFn({ ids, photoName }: IdeleteArg) {
-        console.log(ids);
-        console.log(photoName);
         try {
           const collectionRef = collection(db, collectionName);
           ids.forEach(async (id) => {
@@ -171,6 +173,42 @@ export const firestoreApi = createApi({
       },
       invalidatesTags: ["Firestore"],
     }),
+
+    // Add to Favourite
+    addToFavourite: builder.mutation({
+      async queryFn({ ids }: IaddToFavouriteArg) {
+        try {
+          const collectionRef = collection(db, collectionName);
+          ids.forEach(async (id) => {
+            const docRef = doc(collectionRef, id);
+            await updateDoc(docRef, {
+              data: { favourite: true },
+            } as Partial<IuserDocument>);
+          });
+          return { data: "ok" };
+        } catch (e) {
+          return { error: e };
+        }
+      },
+    }),
+
+    // Delete From favourite->remove favourite field
+    deleteFromFavourite: builder.mutation({
+      async queryFn({ ids }: IaddToFavouriteArg) {
+        try {
+          const collectionRef = collection(db, collectionName);
+          ids.forEach(async (id) => {
+            const docRef = doc(collectionRef, id);
+            await updateDoc(docRef, {
+              favourite: deleteField(),
+            } as Partial<IuserDocument>);
+          });
+          return { data: "ok" };
+        } catch (e) {
+          return { error: e };
+        }
+      },
+    }),
   }),
 });
 
@@ -180,4 +218,6 @@ export const {
   useFetchNextLimitedDataFromFirebaseQuery,
   useUpdateDatafromFirebaseMutation,
   useDeleteDataFromFirebaseMutation,
+  useAddToFavouriteMutation,
+  useDeleteFromFavouriteMutation,
 } = firestoreApi;

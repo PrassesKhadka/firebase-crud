@@ -29,6 +29,7 @@ export interface Idata {
   personalInfo: IpersonalInfo;
   academicInfo: IacademicInfo;
   additionalInfo: IadditionalInfo;
+  favourite?: boolean;
 }
 
 export interface IuserDocument {

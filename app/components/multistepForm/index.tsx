@@ -58,6 +58,7 @@ const Form = () => {
     formState: { errors },
   } = useForm<Idata>({
     defaultValues: {
+      favourite: false,
       additionalInfo: {
         photo: {
           name: "avatar",

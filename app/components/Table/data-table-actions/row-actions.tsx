@@ -24,26 +24,30 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { toast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import { Copy, Edit, Heart, Trash } from "lucide-react";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { IuserDocument } from "@/app/interfaces";
 import { PascalCase } from "@/app/utils/pascalCase";
 import Link from "next/link";
 import { useDeleteDataFromFirebaseMutation } from "@/app/redux/features/firestore/firestoreAPI";
+import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 
 interface DataTableRowActionsProps {
   row: Row<IuserDocument>;
 }
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { id, data } = row.original;
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteDataFromFirebase, { isLoading, isError, isSuccess }] =
+    useDeleteDataFromFirebaseMutation();
+  const { copiedText, copyFunction } = useCopyToClipboard();
+
   const fullName = PascalCase({
     string1: data.personalInfo.name.firstName,
     string2: data.personalInfo.name.lastName,
   });
-  const [deleteDataFromFirebase, { isLoading, isError, isSuccess }] =
-    useDeleteDataFromFirebaseMutation();
 
   return (
     <>
@@ -51,10 +55,9 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted cursor-pointer"
+            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted cursor-pointer ml-2"
           >
-            {/* <DotsHorizontalIcon className="h-4 w-4" /> */}
-            ...
+            <DotsHorizontalIcon className="h-4 w-4 " />
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
@@ -71,17 +74,12 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              navigator.clipboard.writeText(fullName);
+              copyFunction([fullName]);
             }}
             className="flex justify-between items-center cursor-pointer"
           >
             Copy name
             <Copy className="text-gray-500 w-4 h-6" />
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="flex justify-between items-center">
-            Favourite
-            <Heart className="text-green-500 w-4 h-6" />
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={() => setShowDeleteDialog(true)}>
@@ -112,7 +110,8 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
                   photoName: data.additionalInfo.photo.name,
                 });
                 toast({
-                  description: "This record has been deleted.",
+                  variant: "success",
+                  description: "The record has been deleted.",
                 });
               }}
             >

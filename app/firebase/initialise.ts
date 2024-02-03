@@ -18,6 +18,7 @@ const app = initializeApp(firebaseConfig);
 // Get firestore ref
 export const db = getFirestore(app);
 // Defining collection names
-export const collectionName = "students";
+export type TcollectionName = "students";
+export const collectionName: TcollectionName = "students";
 // Get storage ref
 export const storage = getStorage(app);

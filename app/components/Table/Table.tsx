@@ -33,6 +33,7 @@ const ReactTable = <T,>({
   // To use this state globally across all components you can access it through
   // table.state
   const [rowSelection, setRowSelection] = useState({});
+  const [rowPinning, setRowPinning] = useState({});
 
   const table = useReactTable({
     data,
@@ -41,6 +42,7 @@ const ReactTable = <T,>({
     getPaginationRowModel: getPaginationRowModel(),
     state: {
       rowSelection,
+      rowPinning,
     },
     onRowSelectionChange: setRowSelection,
   });

@@ -30,11 +30,18 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
+import {
+  DotsHorizontalIcon,
+  HeartFilledIcon,
+  HeartIcon,
+} from "@radix-ui/react-icons";
 import { type RowSelectionState } from "@tanstack/react-table";
 import {
   useFetchNextLimitedDataFromFirebaseQuery,
   useDeleteDataFromFirebaseMutation,
 } from "@/app/redux/features/firestore/firestoreAPI";
+import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
+import { PascalCase } from "@/app/utils/pascalCase";
 
 interface IdataTableMultipleRowActionsProps {
   isSomeRowsSelected: boolean;
@@ -50,6 +57,7 @@ export function DataTableMultipleRowActions({
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const { data } = useFetchNextLimitedDataFromFirebaseQuery({});
   const [deleteDataFromFirebase] = useDeleteDataFromFirebaseMutation();
+  const { copiedText, copyFunction } = useCopyToClipboard();
 
   const deleteStudentData = async () => {
     let photoName = "";
@@ -63,21 +71,37 @@ export function DataTableMultipleRowActions({
     }
   };
 
+  const copyStudentData = async () => {
+    let studentName = "";
+    if (data) {
+      const toCopyData = Object.keys(selectedRows).map((index: string) => {
+        const i = Number(index);
+        studentName = PascalCase({
+          string1: data[i].data.personalInfo.name.firstName,
+          string2: data[i].data.personalInfo.name.lastName,
+        });
+        return studentName;
+      });
+      await copyFunction(toCopyData);
+    }
+  };
+
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary">
             <span className="sr-only">Actions</span>
-            ...
+            <DotsHorizontalIcon className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
-            onSelect={() => setIsOpen(true)}
+            onClick={() => copyStudentData()}
+            disabled={!isAllRowsSelected && !isSomeRowsSelected}
             className="cursor-pointer"
           >
-            Content filter preferences
+            Copy Selected Names
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -107,7 +131,10 @@ export function DataTableMultipleRowActions({
                 setShowDeleteDialog(false);
                 await deleteStudentData();
                 toast({
-                  description: "This preset has been deleted.",
+                  variant: "success",
+                  description: `${
+                    Object.keys(selectedRows).length
+                  } records have been successfully deleted.`,
                 });
               }}
             >
