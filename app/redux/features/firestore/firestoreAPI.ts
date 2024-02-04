@@ -62,12 +62,14 @@ export const firestoreApi = createApi({
           const collectionRef = collection(db, collectionName);
           const queryRef = query(collectionRef, orderBy("createdAt", "desc"));
           const querySnapshot = await getDocs(queryRef);
-          let studentData: IuserDocument[] = [];
+          let allStudentData: IuserDocument[] = [];
           querySnapshot.forEach((doc) => {
-            studentData.push({ id: doc.id, ...doc.data() } as IuserDocument);
+            allStudentData.push({ id: doc.id, ...doc.data() } as IuserDocument);
           });
-
-          return { data: studentData };
+          const favouriteStudentData = allStudentData.filter(
+            (studentData) => studentData.data.favourite
+          );
+          return { data: allStudentData, favouriteStudentData };
         } catch (e) {
           console.log(e);
           return { error: e };
@@ -181,9 +183,9 @@ export const firestoreApi = createApi({
           const collectionRef = collection(db, collectionName);
           ids.forEach(async (id) => {
             const docRef = doc(collectionRef, id);
-            await updateDoc(docRef, {
-              data: { favourite: true },
-            } as Partial<IuserDocument>);
+            const docSnapshot = await updateDoc(docRef, {
+              favourite: true,
+            } satisfies Partial<Idata>);
           });
           return { data: "ok" };
         } catch (e) {
@@ -200,8 +202,8 @@ export const firestoreApi = createApi({
           ids.forEach(async (id) => {
             const docRef = doc(collectionRef, id);
             await updateDoc(docRef, {
-              favourite: deleteField(),
-            } as Partial<IuserDocument>);
+              favourite: false,
+            } satisfies Partial<Idata>);
           });
           return { data: "ok" };
         } catch (e) {

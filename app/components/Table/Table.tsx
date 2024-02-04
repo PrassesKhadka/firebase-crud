@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import {
   useReactTable,
+  type RowData,
   type ColumnDef,
   getCoreRowModel,
   flexRender,
@@ -18,6 +19,12 @@ import {
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import NoRecords from "./NoRecords";
+import { IuserDocument } from "@/app/interfaces";
+
+interface ColumnMeta<IuserDocument extends RowData> {
+  updateFavouriteRowSelection: (rowId: string) => void;
+  favouriteRowSelection: { [key: string]: boolean };
+}
 
 type ReactTableProps<T> = {
   data: T[];
@@ -33,7 +40,7 @@ const ReactTable = <T,>({
   // To use this state globally across all components you can access it through
   // table.state
   const [rowSelection, setRowSelection] = useState({});
-  const [rowPinning, setRowPinning] = useState({});
+  const [favouriteRowSelection, setFavouriteRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -42,7 +49,11 @@ const ReactTable = <T,>({
     getPaginationRowModel: getPaginationRowModel(),
     state: {
       rowSelection,
-      rowPinning,
+    },
+    meta: {
+      updateFavouriteRowSelection: (rowId: string) =>
+        setFavouriteRowSelection((prev) => (prev = { ...prev, [rowId]: true })),
+      favouriteRowSelection,
     },
     onRowSelectionChange: setRowSelection,
   });

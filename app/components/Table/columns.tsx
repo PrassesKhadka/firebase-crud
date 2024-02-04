@@ -1,6 +1,6 @@
-import { type ColumnDef } from "@tanstack/react-table";
+import { type RowData, type ColumnDef } from "@tanstack/react-table";
 import { IuserDocument } from "@/app/interfaces";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { PascalCase } from "@/app/utils/pascalCase";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -90,6 +90,8 @@ export const columns: ColumnDef<IuserDocument>[] = [
   {
     id: "favourite",
     header: ({ table }) => <FavouriteRowMultipleAction table={table} />,
-    cell: ({ row }) => <FavouriteRow row={row} />,
+    cell: ({ row, table, getValue }) => (
+      <FavouriteRow row={row} table={table} getValue={getValue} />
+    ),
   },
 ];

@@ -15,7 +15,7 @@ export default async function Dashboard() {
   return (
     <>
       {isSuccess ? (
-        <ReactTable columns={columns} data={data} />
+        <ReactTable columns={columns} data={data} pageSize={100} />
       ) : isError ? (
         <div>Error occured</div>
       ) : null}
