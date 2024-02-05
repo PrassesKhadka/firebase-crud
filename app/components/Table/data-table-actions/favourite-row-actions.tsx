@@ -19,14 +19,16 @@ const FavouriteRowAction = ({
   getValue,
 }: IFavouriteRowActionProps) => {
   const { id, data } = row.original;
-  const [isFavourite, setIsFavourite] = useState<boolean>(
-    data.favourite ?? false
-  );
+  const [isFavourite, setIsFavourite] = useState<boolean>(!!data.favourite);
   const [addToFavourite] = useAddToFavouriteMutation();
   const [deleteFromFavourite] = useDeleteFromFavouriteMutation();
 
   const handleOnClick = async () => {
-    await addToFavourite({ ids: [id] });
+    if (!isFavourite) {
+      await addToFavourite({ ids: [id] });
+    } else {
+      await deleteFromFavourite({ ids: [id] });
+    }
     // if the operation is complete then ;
     setIsFavourite((prev) => (prev = !prev));
   };

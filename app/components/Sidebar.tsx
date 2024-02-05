@@ -1,12 +1,12 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { FormInput, Heart } from "lucide-react";
 
-interface Isidebar {
-  numberOfFavourites?: number;
-}
+const Sidebar = () => {
+  const numberOfFavourites = 0;
 
-const Sidebar = ({ numberOfFavourites }: Isidebar) => {
   return (
     <>
       <button

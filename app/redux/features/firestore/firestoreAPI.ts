@@ -66,10 +66,8 @@ export const firestoreApi = createApi({
           querySnapshot.forEach((doc) => {
             allStudentData.push({ id: doc.id, ...doc.data() } as IuserDocument);
           });
-          const favouriteStudentData = allStudentData.filter(
-            (studentData) => studentData.data.favourite
-          );
-          return { data: allStudentData, favouriteStudentData };
+
+          return { data: allStudentData };
         } catch (e) {
           console.log(e);
           return { error: e };
@@ -184,7 +182,7 @@ export const firestoreApi = createApi({
           ids.forEach(async (id) => {
             const docRef = doc(collectionRef, id);
             const docSnapshot = await updateDoc(docRef, {
-              favourite: true,
+              favourite: "true",
             } satisfies Partial<Idata>);
           });
           return { data: "ok" };
@@ -202,7 +200,7 @@ export const firestoreApi = createApi({
           ids.forEach(async (id) => {
             const docRef = doc(collectionRef, id);
             await updateDoc(docRef, {
-              favourite: false,
+              favourite: "false",
             } satisfies Partial<Idata>);
           });
           return { data: "ok" };
@@ -215,9 +213,9 @@ export const firestoreApi = createApi({
 });
 
 export const {
-  useAddDataToFirebaseMutation,
   useFetchDataFromFirebaseQuery,
   useFetchNextLimitedDataFromFirebaseQuery,
+  useAddDataToFirebaseMutation,
   useUpdateDatafromFirebaseMutation,
   useDeleteDataFromFirebaseMutation,
   useAddToFavouriteMutation,
