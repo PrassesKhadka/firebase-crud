@@ -56,7 +56,6 @@ export const columns: ColumnDef<IuserDocument>[] = [
         string2: row.data.personalInfo.name.lastName,
       })}`,
   },
-
   {
     header: "Email",
     accessorFn: (row) => row.data.personalInfo.email,

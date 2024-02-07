@@ -36,9 +36,10 @@ interface Object {
 }
 
 const Form = () => {
+  const router = useRouter();
   const params = useParams();
   const { id } = params;
-  // This is the IuserDocument data the state of form/react hook form is Idata so we need this store it
+  // This is the IuserDocument data the state of form/react hook form is Idata so we need this, store it
   const userData = useRef<IuserDocument>();
   const { data } = useFetchNextLimitedDataFromFirebaseQuery({});
 
@@ -77,7 +78,6 @@ const Form = () => {
     totalStep,
     prev,
     next,
-    goTo,
   } = useMultistepForm([
     <Step1 control={control} errors={errors} key={1} />,
     <Step2 control={control} errors={errors} key={2} />,
@@ -90,7 +90,6 @@ const Form = () => {
     />,
   ]);
 
-  const router = useRouter();
   const [
     addDataToFirebase,
     { isLoading: isLoadingForAddingData, isSuccess: isSuccessForAddingData },
@@ -101,27 +100,26 @@ const Form = () => {
   ] = useUpdateDatafromFirebaseMutation();
 
   const submitHandler = async (data: Idata) => {
-    console.log(data);
     if (currentStep + 1 != totalStep) {
       next();
       return;
     }
-    if (id) {
-      if (!userData.current) return;
-      console.log(userData.current);
-      await updateDataFromFirebase({
-        documentObj: userData.current,
-        updatedObj: data,
-      });
-    } else {
+    if (!id) {
       await addDataToFirebase(data);
+      return;
     }
+    if (!userData.current) return;
+
+    await updateDataFromFirebase({
+      documentObj: userData.current,
+      updatedObj: data,
+    });
     router.push("/dashboard");
   };
 
   return (
     <>
-      <div className="mx-auto max-w-xl">
+      <div className="">
         <div className="flex justify-end items-center">
           <span className="text-md font-semibold">
             {currentStep + 1} / {totalStep}
@@ -141,7 +139,6 @@ const Form = () => {
               "Additional Information",
             ]).map((value, index) => (
               <div
-                // onClick={() => goTo(index)}
                 key={index}
                 className={`text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
                   currentStep === index ? "text-zinc-900 bg-white " : ""

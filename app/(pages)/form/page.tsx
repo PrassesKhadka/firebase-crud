@@ -4,7 +4,9 @@ import React from "react";
 const NewForm = () => {
   return (
     <>
-      <Form />
+      <div className="m-2">
+        <Form />
+      </div>
     </>
   );
 };
