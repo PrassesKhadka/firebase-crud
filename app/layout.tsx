@@ -12,13 +12,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="box-border m-0 p-0 border-0 outline-none">
       <StoreProvider>
         <body
-          className={`${inter.className} antialiased flex min-h-screen flex-col items-center gap-10 `}
+          className={`${inter.className} antialiased flex min-h-screen max-w-screen flex-col items-center relative `}
         >
           <Sidebar />
-          <main className="absolute left-[25%]">{children}</main>
+          <main className="absolute left-[20%]  min-h-screen ">{children}</main>
           <Toaster />
         </body>
       </StoreProvider>

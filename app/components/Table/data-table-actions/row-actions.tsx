@@ -42,7 +42,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteDataFromFirebase, { isLoading, isError, isSuccess }] =
     useDeleteDataFromFirebaseMutation();
-  const { copiedText, copyFunction } = useCopyToClipboard();
+  const { copyFunction } = useCopyToClipboard();
 
   const fullName = PascalCase({
     string1: data.personalInfo.name.firstName,

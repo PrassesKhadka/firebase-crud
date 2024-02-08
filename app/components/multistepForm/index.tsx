@@ -119,7 +119,7 @@ const Form = () => {
 
   return (
     <>
-      <div className="">
+      <div className="p-5">
         <div className="flex justify-end items-center">
           <span className="text-md font-semibold">
             {currentStep + 1} / {totalStep}
@@ -132,7 +132,7 @@ const Form = () => {
           </p>
         </div>
         <div className="flex flex-col justify-evenly gap-5">
-          <div className="flex justify-around gap-2 border-b p-1 bg-gray-100 rounded-md border-gray-200 dark:border-gray-800">
+          <div className="  flex justify-around gap-1 border-b p-1 max-w-full bg-gray-100 rounded-md border-gray-200 dark:border-gray-800">
             {Array.from([
               "Personal Information",
               "Academic Information",
@@ -140,7 +140,7 @@ const Form = () => {
             ]).map((value, index) => (
               <div
                 key={index}
-                className={`text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
+                className={` text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
                   currentStep === index ? "text-zinc-900 bg-white " : ""
                 }`}
               >

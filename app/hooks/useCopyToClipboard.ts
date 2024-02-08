@@ -2,31 +2,34 @@ import { useCallback, useState } from "react";
 
 type TcopiedValue = string;
 interface IreturnUseCopyToClipboard {
-  copiedText: TcopiedValue;
   copyFunction: (text: string[]) => Promise<boolean>;
 }
 
 export function useCopyToClipboard(): IreturnUseCopyToClipboard {
-  const [copiedText, setCopiedText] = useState<TcopiedValue>("");
+  let copyText: TcopiedValue = "";
 
-  const copyFunction = useCallback(async (textArray: string[]) => {
+  const copyFunction = async (textArray: string[]) => {
     if (!navigator?.clipboard) {
       console.warn("Clipboard not supported");
       return false;
     }
     try {
-      textArray.forEach(async (text) => {
-        setCopiedText(text);
-        console.log(copiedText);
-      });
-      await navigator.clipboard.writeText(copiedText);
+      if (textArray.length === 1) {
+        copyText = textArray[0];
+      } else {
+        textArray.forEach((text, index) => {
+          if (index === textArray.length - 1) copyText += text;
+          else copyText += `${text},`;
+        });
+      }
+      await navigator.clipboard.writeText(copyText);
+      copyText = "";
       return true;
     } catch (error) {
       console.warn("Copy failed", error);
-      setCopiedText("");
       return false;
     }
-  }, []);
+  };
 
-  return { copiedText, copyFunction };
+  return { copyFunction };
 }

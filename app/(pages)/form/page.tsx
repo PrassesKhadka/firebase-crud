@@ -4,7 +4,7 @@ import React from "react";
 const NewForm = () => {
   return (
     <>
-      <div className="m-2">
+      <div className="w-full">
         <Form />
       </div>
     </>

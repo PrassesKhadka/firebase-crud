@@ -13,8 +13,14 @@ const config = {
     container: {
       center: true,
       padding: "2rem",
+      /* prettier-ignore */
       screens: {
-        "2xl": "1400px",
+        "sm": "320px",
+        "md": "375px",
+        "lg": "425px",
+        "xl": "768px",
+        "2xl": "1024px",
+        "3xl": "1440px",
       },
     },
     extend: {

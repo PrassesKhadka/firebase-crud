@@ -68,7 +68,7 @@ const ReactTable = <T,>({
         <NoRecords />
       ) : (
         <div>
-          <div className="w-full overflow-auto">
+          <div>
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
