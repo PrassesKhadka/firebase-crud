@@ -57,7 +57,7 @@ export function DataTableMultipleRowActions({
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const { data } = useFetchNextLimitedDataFromFirebaseQuery({});
   const [deleteDataFromFirebase] = useDeleteDataFromFirebaseMutation();
-  const { copiedText, copyFunction } = useCopyToClipboard();
+  const { copyFunction } = useCopyToClipboard();
 
   const deleteStudentData = async () => {
     let photoName = "";
