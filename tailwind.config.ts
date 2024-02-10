@@ -13,14 +13,16 @@ const config = {
     container: {
       center: true,
       padding: "2rem",
-      /* prettier-ignore */
       screens: {
-        "sm": "320px",
-        "md": "375px",
-        "lg": "425px",
-        "xl": "768px",
+        tablet: "640px",
+        // => @media (min-width: 640px) { ... }
+
+        laptop: "1024px",
+        // => @media (min-width: 1024px) { ... }
+
+        desktop: "1280px",
+        // => @media (min-width: 1280px) { ... }
         "2xl": "1024px",
-        "3xl": "1440px",
       },
     },
     extend: {

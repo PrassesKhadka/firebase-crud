@@ -106,6 +106,7 @@ const Form = () => {
     }
     if (!id) {
       await addDataToFirebase(data);
+      router.push("/dashboard");
       return;
     }
     if (!userData.current) return;
