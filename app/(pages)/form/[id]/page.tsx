@@ -6,7 +6,9 @@ import Form from "@/app/components/multistepForm";
 const EditForm = () => {
   return (
     <>
-      <Form />
+      <div className="sm:w-[80vw] flex items-center justify-center">
+        <Form />
+      </div>
     </>
   );
 };

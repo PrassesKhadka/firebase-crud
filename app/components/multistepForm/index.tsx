@@ -120,7 +120,7 @@ const Form = () => {
 
   return (
     <>
-      <div className="p-5">
+      <div className="p-5 py-1">
         <div className="flex justify-end items-center">
           <span className="text-md font-semibold">
             {currentStep + 1} / {totalStep}
@@ -141,7 +141,7 @@ const Form = () => {
             ]).map((value, index) => (
               <div
                 key={index}
-                className={` text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
+                className={`text-center text-gray-400 rounded-md p-1 cursor-pointer transition-colors ${
                   currentStep === index ? "text-zinc-900 bg-white " : ""
                 }`}
               >

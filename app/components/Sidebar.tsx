@@ -14,6 +14,7 @@ import { useWindowSize } from "usehooks-ts";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
   const { width } = useWindowSize();
   const mobileWidth = width < 768;
 

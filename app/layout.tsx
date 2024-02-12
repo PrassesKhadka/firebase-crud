@@ -6,7 +6,7 @@ import StoreProvider from "./redux/StoreProvider";
 import { Inter, PT_Mono, Lusitana, Great_Vibes } from "next/font/google";
 import Sidebar from "./components/Sidebar";
 
-export const inter = PT_Mono({ subsets: ["latin"], weight: "400" });
+export const inter = Inter({ subsets: ["latin"], weight: "400" });
 
 export default function RootLayout({
   children,
@@ -20,7 +20,7 @@ export default function RootLayout({
           className={`${inter.className} antialiased flex min-h-screen max-w-screen `}
         >
           <Sidebar />
-          <main className="m-5 ml-8">{children}</main>
+          <main className="m-5 ml-8 mt-2">{children}</main>
           <Toaster />
         </body>
       </StoreProvider>

@@ -4,7 +4,7 @@ import React from "react";
 const NewForm = () => {
   return (
     <>
-      <div className="w-full">
+      <div className="sm:w-[80vw] flex items-center justify-center">
         <Form />
       </div>
     </>
