@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IuserDocument } from "@/app/interfaces";
 import { type Getter, type Row, type Table } from "@tanstack/react-table";
 import { HeartIcon, HeartFilledIcon } from "@radix-ui/react-icons";
@@ -6,6 +6,7 @@ import {
   useAddToFavouriteMutation,
   useDeleteFromFavouriteMutation,
 } from "@/app/redux/features/firestore/firestoreAPI";
+import Spinner from "../../Spinner";
 
 interface IFavouriteRowActionProps {
   row: Row<IuserDocument>;
@@ -18,10 +19,29 @@ const FavouriteRowAction = ({
   table,
   getValue,
 }: IFavouriteRowActionProps) => {
-  const { id, data } = row.original;
-  const [isFavourite, setIsFavourite] = useState<boolean>(!!data.favourite);
-  const [addToFavourite] = useAddToFavouriteMutation();
-  const [deleteFromFavourite] = useDeleteFromFavouriteMutation();
+  const { id, favourite } = row.original;
+  const [isFavourite, setIsFavourite] = useState<boolean>(
+    favourite === "true" ? true : false
+  );
+  const [
+    addToFavourite,
+    {
+      isLoading: isLoadingAddToFavourite,
+      isError: isErrorAddToFavourite,
+      isSuccess: isSuccessAddToFavourite,
+    },
+  ] = useAddToFavouriteMutation();
+  const [
+    deleteFromFavourite,
+    {
+      isLoading: isLoadingDeleteFromFavourite,
+      isError: isErrorDeleteFromFavourite,
+      isSuccess: isSuccessDeleteFromFavourite,
+    },
+  ] = useDeleteFromFavouriteMutation();
+
+  // For toast to appear
+  // useEffect(() => {}, [isErrorAddToFavourite, isErrorDeleteFromFavourite]);
 
   const handleOnClick = async () => {
     if (!isFavourite) {
@@ -30,18 +50,25 @@ const FavouriteRowAction = ({
       await deleteFromFavourite({ ids: [id] });
     }
     // if the operation is complete then ;
-    setIsFavourite((prev) => (prev = !prev));
+    if (!isErrorAddToFavourite || !isErrorDeleteFromFavourite) {
+      setIsFavourite((prev) => (prev = !prev));
+    }
   };
 
   return (
     <>
-      <div onClick={handleOnClick}>
-        {isFavourite ? (
-          <HeartFilledIcon className="text-2xl" />
+      <button
+        onClick={handleOnClick}
+        disabled={isLoadingAddToFavourite || isLoadingDeleteFromFavourite}
+      >
+        {isLoadingAddToFavourite || isLoadingDeleteFromFavourite ? (
+          "Loading..."
+        ) : isFavourite ? (
+          <HeartFilledIcon className="text-3xl text-red-500 " />
         ) : (
-          <HeartIcon className="text-2xl" />
+          <HeartIcon className="text-3xl" />
         )}
-      </div>
+      </button>
     </>
   );
 };

@@ -11,7 +11,7 @@ const FavouriteRowMultipleAction = ({
 }: IfavouriteRowMultipleActionProps) => {
   return (
     <>
-      <HeartIcon className="text-2xl" />
+      <HeartIcon className="text-3xl " />
     </>
   );
 };

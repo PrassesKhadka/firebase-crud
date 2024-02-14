@@ -121,6 +121,7 @@ export const firestoreApi = createApi({
           const collectionRef = collection(db, collectionName);
           const actuallData: Omit<IuserDocument, "id"> = {
             data,
+            favourite: "false",
             createdAt: serverTimestamp(),
             lastUpdatedAt: serverTimestamp(),
           };
@@ -183,13 +184,14 @@ export const firestoreApi = createApi({
             const docRef = doc(collectionRef, id);
             const docSnapshot = await updateDoc(docRef, {
               favourite: "true",
-            } satisfies Partial<Idata>);
+            } satisfies Partial<IuserDocument>);
           });
           return { data: "ok" };
         } catch (e) {
           return { error: e };
         }
       },
+      invalidatesTags: ["Firestore"],
     }),
 
     // Delete From favourite->remove favourite field
@@ -201,13 +203,38 @@ export const firestoreApi = createApi({
             const docRef = doc(collectionRef, id);
             await updateDoc(docRef, {
               favourite: "false",
-            } satisfies Partial<Idata>);
+            } satisfies Partial<IuserDocument>);
           });
           return { data: "ok" };
         } catch (e) {
           return { error: e };
         }
       },
+      invalidatesTags: ["Firestore"],
+    }),
+
+    // Fech favourite datas
+    fetchFavouriteStudentData: builder.query({
+      async queryFn() {
+        try {
+          const collectionRef = collection(db, collectionName);
+          const queryRef = query(
+            collectionRef,
+            where("favourite", "==", "true")
+          );
+          const querySnapshots = await getDocs(queryRef);
+          const favouriteStudentsArray: IuserDocument[] = [];
+          querySnapshots.forEach((doc) => {
+            favouriteStudentsArray.push({ ...doc.data() } as IuserDocument);
+          });
+          console.log(favouriteStudentsArray);
+          return { data: favouriteStudentsArray };
+        } catch (e) {
+          console.error(e);
+          return { error: e };
+        }
+      },
+      providesTags: ["Firestore"],
     }),
   }),
 });
@@ -220,4 +247,5 @@ export const {
   useDeleteDataFromFirebaseMutation,
   useAddToFavouriteMutation,
   useDeleteFromFavouriteMutation,
+  useFetchFavouriteStudentDataQuery,
 } = firestoreApi;

@@ -29,12 +29,12 @@ export interface Idata {
   personalInfo: IpersonalInfo;
   academicInfo: IacademicInfo;
   additionalInfo: IadditionalInfo;
-  favourite: "true" | "false";
 }
 
 export interface IuserDocument {
   id: string;
   data: Idata;
+  favourite: "true" | "false";
   createdAt: FieldValue;
   lastUpdatedAt: FieldValue;
 }

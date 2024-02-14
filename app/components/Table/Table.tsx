@@ -53,11 +53,12 @@ const ReactTable = <T,>({
     state: {
       rowSelection,
     },
-    meta: {
-      updateFavouriteRowSelection: (rowId: string) =>
-        setFavouriteRowSelection((prev) => (prev = { ...prev, [rowId]: true })),
-      favouriteRowSelection,
-    },
+    // To implement click on heart to choose all heart
+    // meta: {
+    //   updateFavouriteRowSelection: (rowId: string) =>
+    //     setFavouriteRowSelection((prev) => (prev = { ...prev, [rowId]: true })),
+    //   favouriteRowSelection,
+    // },
     onRowSelectionChange: setRowSelection,
   });
 
