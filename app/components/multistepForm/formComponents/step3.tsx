@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -56,6 +57,7 @@ const Step3 = ({ control, errors, setValue, getValues }: IformStepProps) => {
         }
       );
     };
+
     upload();
   }, [file]);
 
@@ -69,7 +71,7 @@ const Step3 = ({ control, errors, setValue, getValues }: IformStepProps) => {
               onChange={(e) => setFile(e.target.files?.[0])}
               title={getValues?.("additionalInfo.photo.name") ?? "avatar.png"}
               id="photo"
-              accept="image/png"
+              accept="image/*"
               type="file"
             />
             <p className="text-green-500 text-xs italic">
