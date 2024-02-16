@@ -26,3 +26,7 @@ console.log(result); // Outputs: "default"
 const value="false"
 JSON.parse(value)  // Output: false in boolean
 ```
+
+## Some useful github repos to check out:
+
+- (TypeScript CheatSheet)["https://github.com/Sue-52/TypeScript/tree/main"]
