@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { IuserDocument } from "@/app/interfaces";
 import { type Getter, type Row, type Table } from "@tanstack/react-table";
@@ -57,18 +59,20 @@ const FavouriteRowAction = ({
 
   return (
     <>
-      <button
-        onClick={handleOnClick}
-        disabled={isLoadingAddToFavourite || isLoadingDeleteFromFavourite}
-      >
-        {isLoadingAddToFavourite || isLoadingDeleteFromFavourite ? (
-          "Loading..."
-        ) : isFavourite ? (
-          <HeartFilledIcon className="text-3xl text-red-500 " />
-        ) : (
-          <HeartIcon className="text-3xl" />
-        )}
-      </button>
+      {isLoadingAddToFavourite || isLoadingDeleteFromFavourite ? (
+        "Loading..."
+      ) : (
+        <button
+          onClick={handleOnClick}
+          disabled={isLoadingAddToFavourite || isLoadingDeleteFromFavourite}
+        >
+          {isFavourite ? (
+            <HeartFilledIcon className="text-3xl text-red-500 " />
+          ) : (
+            <HeartIcon className="text-3xl" />
+          )}
+        </button>
+      )}
     </>
   );
 };

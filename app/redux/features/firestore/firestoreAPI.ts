@@ -225,7 +225,10 @@ export const firestoreApi = createApi({
           const querySnapshots = await getDocs(queryRef);
           const favouriteStudentsArray: IuserDocument[] = [];
           querySnapshots.forEach((doc) => {
-            favouriteStudentsArray.push({ ...doc.data() } as IuserDocument);
+            favouriteStudentsArray.push({
+              id: doc.id,
+              ...doc.data(),
+            } as IuserDocument);
           });
           console.log(favouriteStudentsArray);
           return { data: favouriteStudentsArray };
