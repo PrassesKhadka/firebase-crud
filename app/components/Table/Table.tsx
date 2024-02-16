@@ -64,8 +64,8 @@ const ReactTable = <T,>({
   const [columns, setColumns] = useState(columnsProp);
   // To make it mobile responsive
   useEffect(() => {
-    const mobileWidth = width < 425;
-    const betweenMobileAndTabletWidth = width >= 425 && width < 768;
+    const mobileWidth = width <= 425;
+    const betweenMobileAndTabletWidth = width > 425 && width < 768;
     const tabletWidth = width >= 768 && width < 1024;
 
     if (mobileWidth) {
