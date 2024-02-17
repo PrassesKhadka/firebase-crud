@@ -26,30 +26,40 @@ import { useWindowSize } from "usehooks-ts";
 //   favouriteRowSelection: { [key: string]: boolean };
 // }
 
+interface IcolumnVisibility {
+  visibleFirstColumns: number;
+  visibleLastColumns: number;
+}
+type Tbreakpoints = "sm" | "md" | "lg";
+interface Ibreakpoints {
+  sm: IcolumnVisibility;
+  md: IcolumnVisibility;
+  lg: IcolumnVisibility;
+}
+
 type ReactTableProps<T> = {
   data: T[];
   columns: ColumnDef<T>[];
   pageSize?: number;
+  collapseColumns?: Ibreakpoints;
 };
 
 interface Istate<T> {
   columns: ColumnDef<T>[];
 }
-interface Ipayload {
-  // Get first how many columns or last how many columns:
-  getFirstNColumns: number;
-  getLastNColumns?: number;
-}
-type Ttype = "mobileWidth" | "betweenMobileAndTabletWidth" | "tabletWidth";
+
 interface Iaction {
-  type: Ttype;
-  // how many columns you would want to show
-  payload: Ipayload;
+  type: Tbreakpoints;
 }
 const ReactTable = <T,>({
   data,
   columns: columnsProp,
   pageSize = 5,
+  collapseColumns = {
+    sm: { visibleFirstColumns: 3, visibleLastColumns: 2 },
+    md: { visibleFirstColumns: 4, visibleLastColumns: 2 },
+    lg: { visibleFirstColumns: 5, visibleLastColumns: 2 },
+  },
 }: ReactTableProps<T>) => {
   // To make it mobile responsive
   // Why did i use useReducer here:: because, my first approach was this way but since this is
@@ -64,47 +74,46 @@ const ReactTable = <T,>({
   const [columns, setColumns] = useState(columnsProp);
   // To make it mobile responsive
   useEffect(() => {
-    const mobileWidth = width <= 425;
-    const betweenMobileAndTabletWidth = width > 425 && width < 768;
+    const mobileWidth = width < 600;
+    const betweenMobileAndTabletWidth = width >= 600 && width < 768;
     const tabletWidth = width >= 768 && width < 1024;
 
     if (mobileWidth) {
       setColumns(() => {
-        const first3 = columnsProp.slice(0, 3);
-        const last2 = columnsProp.slice(-2);
-        return [...first3, ...last2];
+        const firstN = columnsProp.slice(
+          0,
+          collapseColumns.sm.visibleFirstColumns
+        );
+        const lastN = columnsProp.slice(-collapseColumns.sm.visibleLastColumns);
+        return [...firstN, ...lastN];
       });
     } else if (betweenMobileAndTabletWidth) {
       setColumns(() => {
-        const first4 = columnsProp.slice(0, 4);
-        const last2 = columnsProp.slice(-2);
-        return [...first4, ...last2];
+        const firstN = columnsProp.slice(
+          0,
+          collapseColumns.md.visibleFirstColumns
+        );
+        const lastN = columnsProp.slice(-collapseColumns.md.visibleLastColumns);
+        return [...firstN, ...lastN];
       });
     } else if (tabletWidth) {
       setColumns(() => {
-        const first5 = columnsProp.slice(0, 5);
-        const last2 = columnsProp.slice(-2);
-        return [...first5, ...last2];
+        const firstN = columnsProp.slice(
+          0,
+          collapseColumns.lg.visibleFirstColumns
+        );
+        const lastN = columnsProp.slice(-collapseColumns.lg.visibleLastColumns);
+        return [...firstN, ...lastN];
       });
     } else {
       setColumns(columnsProp);
     }
   }, [width]);
 
-  // To Do: optimise throught userReducer
-  // const initialState = { columns: columnsProp };
-  // function reducer(state: Istate<T>, action: Iaction) {
-  //   switch(action.type){
-  //     case "mobileWidth":
-  //         return {columns:}
-  //   }
-  // }
-
-  // const [state, dispatch] = useReducer(reducer, initialState);
   // To use this state globally across all components you can access it through
   // table.state
   const [rowSelection, setRowSelection] = useState({});
-  const [favouriteRowSelection, setFavouriteRowSelection] = useState({});
+  // const [favouriteRowSelection, setFavouriteRowSelection] = useState({});
 
   const table = useReactTable({
     data,

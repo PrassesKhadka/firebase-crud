@@ -29,4 +29,5 @@ JSON.parse(value)  // Output: false in boolean
 
 ## Some useful github repos to check out:
 
-- (TypeScript CheatSheet)["https://github.com/Sue-52/TypeScript/tree/main"]
+- [TypeScript CheatSheet](https://github.com/Sue-52/TypeScript/tree/main)
+- [33 JavaScript Concepts Github](https://github.com/leonardomso/33-js-concepts)
