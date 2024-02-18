@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,11 +15,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
+// Initialise Authentication
+export const authInit = getAuth(app);
 // Get firestore ref
 export const db = getFirestore(app);
+// Get storage ref
+export const storage = getStorage(app);
 // Defining collection names
 export type TcollectionName = "students";
 export const collectionName: TcollectionName = "students";
-// Get storage ref
-export const storage = getStorage(app);

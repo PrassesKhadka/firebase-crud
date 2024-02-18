@@ -51,10 +51,10 @@ export const columns: ColumnDef<IuserDocument>[] = [
   {
     header: "Name",
     accessorFn: (row) =>
-      `${PascalCase({
-        string1: row.data.personalInfo.name.firstName,
-        string2: row.data.personalInfo.name.lastName,
-      })}`,
+      `${PascalCase(
+        row.data.personalInfo.name.firstName +
+          row.data.personalInfo.name.lastName
+      )}`,
   },
   {
     header: "Email",

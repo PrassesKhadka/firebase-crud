@@ -76,10 +76,10 @@ export function DataTableMultipleRowActions({
     if (data) {
       const toCopyData = Object.keys(selectedRows).map((index: string) => {
         const i = Number(index);
-        studentName = PascalCase({
-          string1: data[i].data.personalInfo.name.firstName,
-          string2: data[i].data.personalInfo.name.lastName,
-        });
+        studentName = PascalCase(
+          data[i].data.personalInfo.name.firstName +
+            data[i].data.personalInfo.name.lastName
+        );
         return studentName;
       });
       await copyFunction(toCopyData);

@@ -44,10 +44,9 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
     useDeleteDataFromFirebaseMutation();
   const { copyFunction } = useCopyToClipboard();
 
-  const fullName = PascalCase({
-    string1: data.personalInfo.name.firstName,
-    string2: data.personalInfo.name.lastName,
-  });
+  const fullName = PascalCase(
+    data.personalInfo.name.firstName + data.personalInfo.name.lastName
+  );
 
   return (
     <>
