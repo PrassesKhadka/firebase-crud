@@ -1,4 +1,4 @@
-import { DataTableSkeleton } from "@/app/components/Skeleton";
+import { DataTableSkeleton } from "@/app/components/Table/Skeleton";
 import React from "react";
 
 export default function Loading() {

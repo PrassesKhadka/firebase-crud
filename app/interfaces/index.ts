@@ -1,5 +1,15 @@
+import { User } from "firebase/auth";
 import { FieldValue } from "firebase/firestore";
 
+// For authentication
+export type Tuser = User | null;
+export type TloginStatus = "checking" | true | false;
+export interface IuserEmailAndPassword {
+  email: string;
+  password: string;
+}
+
+// For firestore data
 export interface Iname {
   firstName: string;
   lastName: string;

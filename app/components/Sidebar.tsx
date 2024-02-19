@@ -15,6 +15,7 @@ import { useWindowSize } from "usehooks-ts";
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
+  // For responsiveness
   const { width } = useWindowSize();
   const mobileWidth = width < 768;
 
@@ -41,19 +42,19 @@ const Sidebar = () => {
             {
               title: "Dashboard",
               icon: LayoutDashboard,
-              href: "/dashboard",
+              href: "/dashboard/users",
               variant: "ghost",
             },
             {
               title: "Create",
               icon: FormInput,
-              href: "/form",
+              href: "/dashboard/form",
               variant: "ghost",
             },
             {
               title: "Favourites",
               icon: Heart,
-              href: "/favourites",
+              href: "/dashboard/favourites",
               variant: "ghost",
             },
           ]}

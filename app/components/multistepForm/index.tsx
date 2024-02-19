@@ -78,14 +78,13 @@ const Form = () => {
     prev,
     next,
   } = useMultistepForm([
-    <Step1 control={control} errors={errors} key={1} />,
-    <Step2 control={control} errors={errors} key={2} />,
+    <Step1 control={control} errors={errors} />,
+    <Step2 control={control} errors={errors} />,
     <Step3
       control={control}
       errors={errors}
       setValue={setValue}
       getValues={getValues}
-      key={3}
     />,
   ]);
 
@@ -148,6 +147,7 @@ const Form = () => {
               </div>
             ))}
           </div>
+
           <form onSubmit={handleSubmit(submitHandler)}>
             {StepRender}
 

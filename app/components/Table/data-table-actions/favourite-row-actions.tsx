@@ -8,7 +8,6 @@ import {
   useAddToFavouriteMutation,
   useDeleteFromFavouriteMutation,
 } from "@/app/redux/features/firestore/firestoreAPI";
-import Spinner from "../../Spinner";
 
 interface IFavouriteRowActionProps {
   row: Row<IuserDocument>;

@@ -9,7 +9,13 @@ const Favourites = () => {
   const { data, isSuccess, isError, isFetching } =
     useFetchFavouriteStudentDataQuery("");
   return (
-    <>{isSuccess ? <ReactTable data={data} columns={columns} /> : "Error"}</>
+    <>
+      {isSuccess ? (
+        <ReactTable data={data} columns={columns} />
+      ) : isError ? (
+        "Error"
+      ) : null}
+    </>
   );
 };
 
