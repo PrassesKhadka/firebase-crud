@@ -10,6 +10,7 @@ import { registerUser } from "@/app/firebase/auth/auth";
 import { Controller, useForm } from "react-hook-form";
 import { IuserEmailAndPassword } from "@/app/interfaces";
 import { useRouter } from "next/navigation";
+import { useAuthObserver } from "@/app/firebase/auth/useAuthObserver";
 
 interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -18,7 +19,10 @@ export function UserRegisterForm({
   ...props
 }: UserRegisterFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const { currentUser } = useAuthObserver();
+
   const router = useRouter();
+
   const {
     control,
     handleSubmit,

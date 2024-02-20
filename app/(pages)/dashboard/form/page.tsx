@@ -1,4 +1,4 @@
-import Form from "@/app/reusableComponents/multistepForm";
+import Form from "@/app/reusableComponents/MultiStepForm";
 import React from "react";
 
 const NewForm = () => {

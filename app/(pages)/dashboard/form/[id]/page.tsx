@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Form from "@/app/reusableComponents/multistepForm";
+import Form from "@/app/reusableComponents/MultiStepForm";
 
 const EditForm = () => {
   return (
