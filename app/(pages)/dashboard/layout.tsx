@@ -1,6 +1,6 @@
 "use client";
 
-import Sidebar from "@/app/components/Sidebar";
+import Sidebar from "@/app/reusableComponents/Sidebar";
 import { useAuthObserver } from "@/app/firebase/auth/useAuthObserver";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";

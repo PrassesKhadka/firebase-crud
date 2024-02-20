@@ -1,7 +1,7 @@
 "use client";
 
-import ReactTable from "@/app/components/Table/Table";
-import { columns } from "@/app/components/Table/columns";
+import ReactTable from "@/app/reusableComponents/Table/Table";
+import { columns } from "@/app/reusableComponents/Table/columns";
 import { useFetchFavouriteStudentDataQuery } from "@/app/redux/features/firestore/firestoreAPI";
 import React from "react";
 

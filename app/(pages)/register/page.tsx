@@ -3,19 +3,19 @@
 import { useAuthObserver } from "@/app/firebase/auth/useAuthObserver";
 import { redirect } from "next/navigation";
 import React, { useEffect } from "react";
-import LoginPage from "./components/loginPage";
+import RegisterPage from "./components/registerPage";
 
-const Login = () => {
+const Register = () => {
   const { loginStatus } = useAuthObserver();
 
-  // If user logged in then do not let them access login page
+  // If user logged in then do not let them access register or login page
   useEffect(() => {
     if (loginStatus === true) {
       redirect("/dashboard");
     }
   }, [loginStatus]);
 
-  return <>{loginStatus === "checking" ? "Loading..." : <LoginPage />}</>;
+  return <>{loginStatus === "checking" ? "Loading..." : <RegisterPage />}</>;
 };
 
-export default Login;
+export default Register;

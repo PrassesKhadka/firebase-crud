@@ -6,15 +6,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Icons } from "@/components/ui/icons";
-import { registerUser } from "@/app/firebase/auth/auth";
+import { loginUser } from "@/app/firebase/auth/auth";
 import { Controller, useForm } from "react-hook-form";
 import { IuserEmailAndPassword } from "@/app/interfaces";
 import { useRouter } from "next/navigation";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
   const {
@@ -27,7 +26,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: IuserEmailAndPassword) {
     setIsLoading(true);
     try {
-      await registerUser(data);
+      await loginUser(data);
       reset({ email: "", password: "" });
       router.push("/dashboard");
     } catch (error) {
@@ -103,24 +102,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
           <Button disabled={isLoading}>
             {isLoading && "Loading..."}
-            Sign Up
+            Sign In With Email
           </Button>
         </div>
       </form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? "Loading..." : <Icons.google className="mr-2 h-4 w-4" />}{" "}
-        Google
-      </Button>
     </div>
   );
 }

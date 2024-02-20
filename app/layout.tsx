@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import StoreProvider from "./redux/StoreProvider";
 import { Inter, PT_Mono, Lusitana, Great_Vibes } from "next/font/google";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./reusableComponents/Sidebar";
 import { useAuthObserver } from "./firebase/auth/useAuthObserver";
 import { redirect, useRouter } from "next/navigation";
 

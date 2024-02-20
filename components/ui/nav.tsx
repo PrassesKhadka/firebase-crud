@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipTrigger,
@@ -21,82 +21,157 @@ interface NavProps {
     href: string;
     variant: "default" | "ghost";
   }[];
+  buttons?: {
+    title: string;
+    label?: string;
+    icon: LucideIcon;
+    variant: "default" | "ghost";
+    fn: (arg: any) => void;
+  }[];
 }
 
-export function Nav({ links, isCollapsed }: NavProps) {
+export function Nav({ links, isCollapsed, buttons }: NavProps) {
   const pathName = usePathname();
 
   return (
-    <div
-      data-collapsed={isCollapsed}
-      className="group flex flex-col gap-4 py-2 px-2 data-[collapsed=true]:py-2 transition-all"
-    >
-      <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        {links.map((link, index) =>
-          isCollapsed ? (
-            <TooltipProvider key={index}>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={link.href}
+    <>
+      <div
+        data-collapsed={isCollapsed}
+        className="group flex flex-col gap-4 py-2 px-2 data-[collapsed=true]:py-2 transition-all"
+      >
+        <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+          {links.map((link, index) =>
+            isCollapsed ? (
+              <TooltipProvider key={index}>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={link.href}
+                      className={cn(
+                        buttonVariants({
+                          variant: link.href === pathName ? "default" : "ghost",
+                          size: "icon",
+                        }),
+                        "h-9 w-9",
+                        link.variant === "default" &&
+                          "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                      )}
+                    >
+                      <link.icon className="h-4 w-4" />
+                      <span className="sr-only">{link.title}</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="right"
+                    className="flex items-center gap-4"
+                  >
+                    {link.title}
+                    {link.label && (
+                      <span className="ml-auto text-muted-foreground ">
+                        {link.label}
+                      </span>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <Link
+                key={index}
+                href={link.href}
+                className={cn(
+                  buttonVariants({
+                    variant: link.href === pathName ? "default" : "ghost",
+                    size: "sm",
+                  }),
+                  link.variant === "default" &&
+                    "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                  "justify-start"
+                )}
+              >
+                <link.icon className="mr-2 h-4 w-4" />
+                {link.title}
+                {link.label && (
+                  <span
                     className={cn(
-                      buttonVariants({
-                        variant: link.href === pathName ? "default" : "ghost",
-                        size: "icon",
-                      }),
-                      "h-9 w-9",
+                      "ml-auto",
                       link.variant === "default" &&
-                        "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                        "text-background dark:text-white"
                     )}
                   >
-                    <link.icon className="h-4 w-4" />
-                    <span className="sr-only">{link.title}</span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="right"
-                  className="flex items-center gap-4"
-                >
-                  {link.title}
-                  {link.label && (
-                    <span className="ml-auto text-muted-foreground ">
-                      {link.label}
-                    </span>
-                  )}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : (
-            <Link
-              key={index}
-              href={link.href}
-              className={cn(
-                buttonVariants({
-                  variant: link.href === pathName ? "default" : "ghost",
-                  size: "sm",
-                }),
-                link.variant === "default" &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                "justify-start"
-              )}
-            >
-              <link.icon className="mr-2 h-4 w-4" />
-              {link.title}
-              {link.label && (
-                <span
-                  className={cn(
-                    "ml-auto",
-                    link.variant === "default" &&
-                      "text-background dark:text-white"
-                  )}
-                >
-                  {link.label}
-                </span>
-              )}
-            </Link>
-          )
-        )}
-      </nav>
-    </div>
+                    {link.label}
+                  </span>
+                )}
+              </Link>
+            )
+          )}
+        </nav>
+
+        {/* For Buttons */}
+        <div className="absolute bottom-0">
+          {buttons?.map((button, index) =>
+            isCollapsed ? (
+              <TooltipProvider key={index}>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={button.fn}
+                      className={cn(
+                        buttonVariants({
+                          size: "icon",
+                        }),
+                        "h-9 w-9",
+                        button.variant === "default" &&
+                          "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                      )}
+                    >
+                      <button.icon className="h-4 w-4" />
+                      <span className="sr-only">{button.title}</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="right"
+                    className="flex items-center gap-4"
+                  >
+                    {button.title}
+                    {button.label && (
+                      <span className="ml-auto text-muted-foreground ">
+                        {button.label}
+                      </span>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <Button
+                onClick={button.fn}
+                key={index}
+                className={cn(
+                  buttonVariants({
+                    size: "sm",
+                  }),
+                  button.variant === "default" &&
+                    "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                  "justify-start"
+                )}
+              >
+                <button.icon className="mr-2 h-4 w-4" />
+                {button.title}
+                {button.label && (
+                  <span
+                    className={cn(
+                      "ml-auto",
+                      button.variant === "default" &&
+                        "text-background dark:text-white"
+                    )}
+                  >
+                    {button.label}
+                  </span>
+                )}
+              </Button>
+            )
+          )}
+        </div>
+      </div>
+    </>
   );
 }

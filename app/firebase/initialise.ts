@@ -17,10 +17,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Initialise Authentication
 export const authInit = getAuth(app);
+// Defining auth collection Name
+export const authCollectionName = "users";
 // Get firestore ref
 export const db = getFirestore(app);
 // Get storage ref
 export const storage = getStorage(app);
-// Defining collection names
+// Defining collection names->Firestore data
 export type TcollectionName = "students";
 export const collectionName: TcollectionName = "students";

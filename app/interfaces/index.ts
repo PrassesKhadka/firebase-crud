@@ -9,7 +9,7 @@ export interface IuserEmailAndPassword {
   password: string;
 }
 
-// For firestore data
+// For firestore student's data
 export interface Iname {
   firstName: string;
   lastName: string;
@@ -47,4 +47,17 @@ export interface IuserDocument {
   favourite: "true" | "false";
   createdAt: FieldValue;
   lastUpdatedAt: FieldValue;
+}
+
+// Custom Utility type -> https://dev.to/danielbellmas/dependent-props-in-react-typescript-2mne
+// takes an interface and makes every key as optional and never
+export type Never<T> = { [P in keyof T]?: never };
+
+// auth user data
+export interface IauthUserData extends IuserEmailAndPassword {
+  fullName: {
+    firstName: string;
+    lastName: string;
+  };
+  createdAt: FieldValue;
 }
