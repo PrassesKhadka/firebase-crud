@@ -13,6 +13,7 @@ interface IauthenticationWrapperProps {
   description: string;
   footer: string;
   footerLinks: IfooterLinks[];
+  // The children is the form part
   children: React.ReactElement;
   buttons: {
     title: string;

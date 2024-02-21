@@ -11,6 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import { IauthUserData, IuserEmailAndPassword } from "@/app/interfaces";
 import { useRouter } from "next/navigation";
 import { useAddAuthUserDataMutation } from "@/app/redux/features/auth/authAPI";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -19,6 +20,7 @@ export function UserRegisterForm({
   ...props
 }: UserRegisterFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const router = useRouter();
   const [addAuthUserData] = useAddAuthUserDataMutation({});
 
@@ -28,6 +30,10 @@ export function UserRegisterForm({
     reset,
     formState: { errors },
   } = useForm<IuserEmailAndPassword & Omit<IauthUserData, "createdAt">>();
+
+  function toggleShowPassword() {
+    setShowPassword((prev) => !prev);
+  }
 
   async function onSubmit(
     data: IuserEmailAndPassword & Omit<IauthUserData, "createdAt">
@@ -174,7 +180,7 @@ export function UserRegisterForm({
                   onChange={onChange}
                   value={value}
                   placeholder="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoCapitalize="none"
                   autoComplete="none"
                   autoCorrect="off"
@@ -182,6 +188,16 @@ export function UserRegisterForm({
                 />
               )}
             />
+            <div className="flex justify-start items-center gap-2 mt-2 p-2 pl-0">
+              <Checkbox
+                id="show-password"
+                className=""
+                onCheckedChange={toggleShowPassword}
+              />
+              <Label htmlFor="show-password" className="">
+                Show Password
+              </Label>
+            </div>
             <p className="text-sm text-muted-foreground text-red-500 py-1">
               {errors?.password?.message}
             </p>

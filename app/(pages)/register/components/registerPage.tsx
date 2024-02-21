@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
   return (
     <>
-      <div className="container relative h-screen w-screen md:grid lg:min-w-screen  lg:px-0">
+      <div className="container relative min-h-screen min-w-screen mt-12 mb-3 md:grid md:mt-1 md:mb-1 lg:min-w-screen  lg:px-0">
         <Link
           href="/login"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8 border"
+            "absolute right-4 -top-10 md:right-8 md:top-2 border"
           )}
         >
           Login

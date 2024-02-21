@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { useWindowSize } from "usehooks-ts";
-import { logoutUser } from "../firebase/auth/auth";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
@@ -58,14 +57,6 @@ const Sidebar = () => {
               icon: Heart,
               href: "/dashboard/favourites",
               variant: "ghost",
-            },
-          ]}
-          buttons={[
-            {
-              title: "LogOut",
-              icon: LogOut,
-              variant: "ghost",
-              fn: () => logoutUser(),
             },
           ]}
         />

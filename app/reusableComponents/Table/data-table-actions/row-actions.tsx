@@ -64,7 +64,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           align="end"
           className="w-[160px] mt-2 bg-white border flex flex-col justify-around gap-1 rounded-md p-2 z-50"
         >
-          <Link href={`/form/${id}`}>
+          <Link href={`/dashboard/form/${id}`}>
             <DropdownMenuItem className="flex justify-between items-center">
               Edit
               <Edit className="text-blue-500 w-4 h-6" />
