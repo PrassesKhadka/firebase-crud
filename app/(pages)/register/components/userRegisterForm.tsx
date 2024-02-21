@@ -8,9 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerUser } from "@/app/firebase/auth/auth";
 import { Controller, useForm } from "react-hook-form";
-import { IuserEmailAndPassword } from "@/app/interfaces";
+import { IauthUserData, IuserEmailAndPassword } from "@/app/interfaces";
 import { useRouter } from "next/navigation";
-import { useAuthObserver } from "@/app/firebase/auth/useAuthObserver";
+import { useAddAuthUserDataMutation } from "@/app/redux/features/auth/authAPI";
 
 interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -19,26 +19,35 @@ export function UserRegisterForm({
   ...props
 }: UserRegisterFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const { currentUser } = useAuthObserver();
-
   const router = useRouter();
+  const [addAuthUserData] = useAddAuthUserDataMutation({});
 
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<IuserEmailAndPassword>();
+  } = useForm<IuserEmailAndPassword & Omit<IauthUserData, "createdAt">>();
 
-  async function onSubmit(data: IuserEmailAndPassword) {
+  async function onSubmit(
+    data: IuserEmailAndPassword & Omit<IauthUserData, "createdAt">
+  ) {
     setIsLoading(true);
     try {
-      await registerUser(data);
-      reset({ email: "", password: "" });
+      const { email, password, fullName } = data;
+      const user = await registerUser({ email, password });
+      if (user) {
+        await addAuthUserData({
+          id: user.uid,
+          data: { email, fullName },
+        });
+      }
       router.push("/dashboard");
     } catch (error) {
       console.log(error);
-      router.push("/login");
+      setIsLoading(false);
+      reset();
+      router.push("/register");
     }
   }
 
@@ -47,6 +56,71 @@ export function UserRegisterForm({
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="grid gap-2">
           <div className="grid gap-1">
+            {/* First name */}
+            <Label className="sr-only" htmlFor="First Name">
+              First Name
+            </Label>
+            <Controller
+              control={control}
+              name="fullName.firstName"
+              rules={{
+                required: "This is required",
+                pattern: {
+                  value: /^[a-zA-Z\p{L}-]+$/,
+                  message: "numbers,symbols or spaces are not allowed",
+                },
+              }}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id="firstName"
+                  onChange={onChange}
+                  value={value}
+                  placeholder="John"
+                  type="text"
+                  autoCapitalize="none"
+                  autoComplete="none"
+                  autoCorrect="off"
+                  disabled={isLoading}
+                />
+              )}
+            />
+            <p className="text-sm text-muted-foreground text-red-500 py-1">
+              {errors?.fullName?.firstName?.message}
+            </p>
+
+            {/* Last name */}
+            <Label className="sr-only" htmlFor="Last Name">
+              Last Name
+            </Label>
+            <Controller
+              control={control}
+              name="fullName.lastName"
+              rules={{
+                required: "This is required",
+                pattern: {
+                  value: /^[a-zA-Z\p{L}-]+$/,
+                  message: "numbers,symbols or spaces are not allowed",
+                },
+              }}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id="lastName"
+                  onChange={onChange}
+                  value={value}
+                  placeholder="Doe"
+                  type="text"
+                  autoCapitalize="none"
+                  autoComplete="none"
+                  autoCorrect="off"
+                  disabled={isLoading}
+                />
+              )}
+            />
+            <p className="text-sm text-muted-foreground text-red-500 py-1">
+              {errors?.fullName?.lastName?.message}
+            </p>
+
+            {/* For email */}
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
@@ -77,6 +151,11 @@ export function UserRegisterForm({
             <p className="text-sm text-muted-foreground text-red-500 py-1">
               {errors?.email?.message}
             </p>
+
+            {/* For password */}
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
             <Controller
               control={control}
               name="password"

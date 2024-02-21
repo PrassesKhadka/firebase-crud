@@ -1,22 +1,30 @@
 import { authInit } from "../initialise";
 import { IuserEmailAndPassword } from "@/app/interfaces";
 import {
+  type User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 
-export async function registerUser({ email, password }: IuserEmailAndPassword) {
+export async function registerUser({
+  email,
+  password,
+}: IuserEmailAndPassword): Promise<User | undefined> {
+  let user: User | undefined = undefined;
   await createUserWithEmailAndPassword(authInit, email, password)
     .then((userCredential) => {
       // Signed up
-      const user = userCredential.user;
+      user = userCredential.user;
+      return user;
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode + " " + errorMessage);
+      return;
     });
+  return user;
 }
 
 export async function loginUser({ email, password }: IuserEmailAndPassword) {

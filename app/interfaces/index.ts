@@ -54,10 +54,11 @@ export interface IuserDocument {
 export type Never<T> = { [P in keyof T]?: never };
 
 // auth user data
-export interface IauthUserData extends Omit<IuserEmailAndPassword, "password"> {
+export interface IauthUserData {
   fullName: {
     firstName: string;
     lastName: string;
   };
+  email: string;
   createdAt: FieldValue;
 }

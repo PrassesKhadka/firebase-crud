@@ -1,11 +1,13 @@
 "use client";
 
-import Sidebar from "./reusableComponents/Sidebar";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <>
-      <div></div>
+      <div>
+        <Link href="/dashboard"> Go to Dashboard</Link>
+      </div>
     </>
   );
 }

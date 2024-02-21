@@ -18,7 +18,7 @@ export default function LoginPage() {
         <AuthenticationWrapper
           title="Welcome back"
           description="Enter your email to sign in to your account"
-          footer={``}
+          footer={""}
           footerLinks={[
             { title: "Don't have an account? Sign Up", href: "register" },
           ]}

@@ -27,6 +27,12 @@ const value="false"
 JSON.parse(value)  // Output: false in boolean
 ```
 
+- [Creating a props that depends on other props in TypeScript](https://www.youtube.com/watch?v=vXh4PFwZFGI)
+
+```c
+
+```
+
 ## Some useful github repos to check out:
 
 - [TypeScript CheatSheet](https://github.com/Sue-52/TypeScript/tree/main)

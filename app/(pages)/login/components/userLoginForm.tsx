@@ -21,7 +21,9 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<IuserEmailAndPassword>();
+  } = useForm<IuserEmailAndPassword>({
+    defaultValues: { email: "testUser@gmail.com", password: "Test@123" },
+  });
 
   async function onSubmit(data: IuserEmailAndPassword) {
     setIsLoading(true);

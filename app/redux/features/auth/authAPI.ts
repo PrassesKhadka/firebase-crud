@@ -17,11 +17,11 @@ export const authApi = createApi({
   endpoints: (builder) => ({
     // To fetch Authenticated user's data
     fetchAuthUserData: builder.query({
-      async queryFn(id: string) {
+      async queryFn({ id }: { id: string }) {
         try {
           const collectionRef = collection(db, authCollectionName);
           const docRef = doc(collectionRef, id);
-          const data = await getDoc(docRef);
+          const data = (await getDoc(docRef)).data() as IauthUserData;
           return { data };
         } catch (e) {
           console.log(e);
@@ -44,6 +44,7 @@ export const authApi = createApi({
         try {
           const collectionRef = collection(db, authCollectionName);
           const docRef = doc(collectionRef, id);
+          console.log(id);
           const actuallData = {
             ...data,
             createdAt: serverTimestamp(),

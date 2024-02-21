@@ -4,15 +4,20 @@ import type { TypedUseSelectorHook } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { firestoreApi } from "./features/firestore/firestoreAPI";
 import firestoreSlice from "./features/firestore/firestoreSlice";
+import { authApi } from "./features/auth/authAPI";
 
 export const store = () => {
   return configureStore({
     reducer: {
       firestore: firestoreSlice,
       [firestoreApi.reducerPath]: firestoreApi.reducer,
+      [authApi.reducerPath]: authApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(firestoreApi.middleware),
+      getDefaultMiddleware().concat(
+        firestoreApi.middleware,
+        authApi.middleware
+      ),
   });
 };
 
