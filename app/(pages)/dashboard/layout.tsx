@@ -5,6 +5,7 @@ import { useAuthObserver } from "@/app/firebase/auth/useAuthObserver";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 import { useFetchAuthUserDataQuery } from "@/app/redux/features/auth/authAPI";
+import { UserNav } from "@/app/(pages)/dashboard/components/user-nav";
 
 export default function DashboardLayout({
   children,
@@ -17,8 +18,6 @@ export default function DashboardLayout({
     // so we can assert it will be a string
     id: currentUser?.uid as string,
   });
-  console.log(currentUser);
-  console.log(data);
 
   // For authentication-> If not logged in then do not let the user access the dashboard or dashboard/users or /form ....
   useEffect(() => {
@@ -32,10 +31,14 @@ export default function DashboardLayout({
       {loginStatus === "checking" ? (
         "Loading"
       ) : loginStatus === true ? (
-        <div className="flex min-h-screen max-w-screen">
+        <div className="relative flex min-h-screen max-w-screen">
           <Sidebar />
-          Welcome to the Dashboard {currentUser?.email} and{" "}
-          {data?.fullName.firstName} {loginStatus ? "true" : "false"}
+          <div className=" absolute right-2 top-4 flex items-center space-x-2">
+            <UserNav
+              name={`${data?.fullName.firstName} ${data?.fullName.lastName}`}
+              email={data ? data?.email : ""}
+            />
+          </div>
           <section className="m-5 ml-8 mt-2">{children}</section>
         </div>
       ) : null}
