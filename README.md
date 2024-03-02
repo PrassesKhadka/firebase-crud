@@ -39,3 +39,5 @@ JSON.parse(value)  // Output: false in boolean
 - [TypeScript:Scratching the surface -> dependent props](https://dev.to/danielbellmas/dependent-props-in-react-typescript-2mne)
 - [33 JavaScript Concepts Github](https://github.com/leonardomso/33-js-concepts)
 - [React Firebase hooks](https://github.com/CSFrequency/react-firebase-hooks/tree/master)
+- [Server side pagination in React table blog](https://karthikraja555.medium.com/server-side-pagination-in-react-table-a4311b730d19#:~:text=The%20logic%20for%20achieving%20server,So%2C%20let's%20consider%20it%20done.) and [github link](https://github.com/karthik-raja-g/react-table-server-side-pagination/blob/master/src/components/pagination/index.jsx)
+- [pagination](https://github.com/safak/nextadmin/blob/completed/app/ui/dashboard/pagination/pagination.jsx)
