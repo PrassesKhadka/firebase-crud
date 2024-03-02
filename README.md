@@ -38,3 +38,4 @@ JSON.parse(value)  // Output: false in boolean
 - [TypeScript CheatSheet](https://github.com/Sue-52/TypeScript/tree/main)
 - [TypeScript:Scratching the surface -> dependent props](https://dev.to/danielbellmas/dependent-props-in-react-typescript-2mne)
 - [33 JavaScript Concepts Github](https://github.com/leonardomso/33-js-concepts)
+- [React Firebase hooks](https://github.com/CSFrequency/react-firebase-hooks/tree/master)
